@@ -193,6 +193,15 @@ function onInit()
 	ActionsManager.registerResultHandler("critical", onRoll);
 end
 
+function mysplit(inputstr, sep)
+  			if sep == nil then sep = "%s" end
+        			local t={}
+        			for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+                		table.insert(t, str)
+        			end
+        			return t
+			end
+
 function getRoll(rActor)
 	local rRoll = {};
 	rRoll.sType = "critical";
@@ -202,20 +211,29 @@ function getRoll(rActor)
 	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
 	local bIsSourcePC = (nodeActor and sActorType == "pc");
 	
-	local sCritTable;
+	local sCritTable = "";
 	local sCritDie = "d4";
 	rRoll.nMod = DB.getValue(nodeActor, "abilities.luck.bonus", 0);
 	
 	if bIsSourcePC then
+
+		-- for a PC, crittable is really the table (eg. "I" or "II")
+		-- the die is stored separately
+
 		rRoll.aDice = DB.getValue(nodeActor, "critdie", {"d4"});
 		rRoll.nMod = rRoll.nMod + DB.getValue(nodeActor, "critbonus", 0);
-
 		sCritDie = rRoll.aDice[1];
 		sCritTable = DB.getValue(nodeActor, "crittable", "I");
+
 	else
+
+		-- for a NPC, crittable is a combination of both, separated by / (eg. "II/d4")
+
 		local sCrit = DB.getValue(nodeActor, "crittable", "");
 		if sCrit ~= "" then
-			sCritTable, sCritDie = sCrit:match("(%a+)%s*/%s*([d%d]+)");
+			local t = mysplit( sCrit , "/" );
+			if t[1] then sCritTable = t[1]:match("%s*[%a]+"); end
+			if t[2] then sCritDie = t[2]:match("%s*([d%d]+)"); end
 		else
 			sCritTable = "M";	
 		end

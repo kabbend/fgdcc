@@ -90,8 +90,24 @@
 			<label_column name="crittable_label">
 				<static textres="npc_label_crittable" />
 			</label_column>
-			<string_columnh name="crittable" />
-			
+			<string_columnh name="crittable">
+				<script>
+                        	function action(draginfo)
+                                        local rActor = ActorManager.getActor("npc", window.getDatabaseNode());
+                                        ActionCritical.performRoll(draginfo, rActor);                                                                                                                               return true;
+                                end
+
+                                function onDoubleClick(x,y)
+                                        action();
+                                end
+
+                                function onDragStart(button, x, y, draginfo)
+                                        action(draginfo);
+                                        return true;
+                                end
+                        	</script>
+			</string_columnh>
+	
 			<label_column name="ac_label">
 				<static textres="npc_label_ac" />
 			</label_column>

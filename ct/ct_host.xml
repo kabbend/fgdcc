@@ -332,6 +332,22 @@
 			</label>
 			<string_ct name="crittable">
 				<anchored to="actiondice" position="right" offset="45,0" width="90" />
+				<script>
+				function action(draginfo)
+                                        local rActor = ActorManager.getActor("npc", window.getDatabaseNode());
+					ActionCritical.performRoll(draginfo, rActor);                                                                                                                   return true;
+				 end
+
+                                function onDoubleClick(x,y)
+                                        action();
+                                end
+
+                                function onDragStart(button, x, y, draginfo)
+                                        action(draginfo);
+                                        return true;
+                                end
+
+				</script>
 			</string_ct>
 			<label name="crittablelabel">
 				<anchored to="crittable" position="lefthigh" offset="5,0"/>

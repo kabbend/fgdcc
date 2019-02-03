@@ -502,8 +502,6 @@ function parseAttackLine(rActor, sLine)
 		end
 	end
 	
-	Debug.chat("rAttackRolls size = " .. #rAttackRolls );
-
 	return rAttackRolls, rDamageRolls, rAttackCombos;
 end
 
