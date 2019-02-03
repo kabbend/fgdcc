@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="item">
+		<frame>recordsheet</frame>
+		<placement>
+			<size width="350" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="300" />
+			<dynamic />
+		</sizelimits>
+		<nodelete />
+		<playercontrol />
+		<sharable />
+		<tooltip field="name" />
+		<minimize>minimized_item</minimize>
+		<script file="campaign/scripts/item.lua" />
+		<sheetdata>
+			<sub_record_header name="header">
+				<class>item_header</class>
+			</sub_record_header>
+
+			<frame_record_content name="contentframe" />
+
+			<subwindow_record name="main">
+				<class>item_main</class>
+				<activate />
+			</subwindow_record>
+
+			<scrollbar_record>
+				<target>main</target>
+			</scrollbar_record>
+
+			<resize_recordsheet />
+			<close_recordsheet />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="item_header" merge="join">
+		<margins control="0,0,0,2" />
+	</windowclass>
+	
+	<windowclass name="item_main">
+		<margins control="0,0,0,2" />
+		<script file="campaign/scripts/item_main.lua" />
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_column name="nonid_name_label">
+				<static textres="item_label_unidentified" />
+			</label_column>
+			<string_columnh name="nonid_name" />
+			
+			<label_column name="nonidentified_label">
+				<static textres="item_label_unidentifiednotes" />
+			</label_column>
+			<string_columnh name="nonidentified" />
+
+			<line_column name="divider" />
+
+			<label_column name="type_label">
+				<static textres="item_label_type" />
+			</label_column>
+			<string_columnh name="type">
+				<nohide />
+				<delaykeyupdate />
+				<script>
+					function onValueChanged()
+						window.update();
+					end
+				</script>
+			</string_columnh>
+
+			<label_column name="subtype_label">
+				<static textres="item_label_subtype" />
+			</label_column>
+			<string_columnh name="subtype">
+				<delaykeyupdate />
+				<script>
+					function onValueChanged()
+						window.update();
+					end
+				</script>
+			</string_columnh>
+
+			<line_column name="divider2" />
+
+			<label_column name="cost_label">
+				<static textres="item_label_cost" />
+			</label_column>
+			<string_columnh name="cost" />
+
+			<label_column name="weight_label">
+				<static textres="item_label_weight" />
+			</label_column>
+			<number_columnh name="weight" />
+
+			<line_column name="divider3" />
+			
+			<label_column name="bonus_label">
+				<static textres="item_label_bonus" />
+			</label_column>
+			<number_columnh name="bonus">
+				<delaykeyupdate />
+				<displaysign />
+			</number_columnh>
+
+			<label_column name="damage_label">
+				<static textres="item_label_damage" />
+			</label_column>
+			<string_columnh name="damage" />
+			
+			<label_column name="ranges_label">
+				<static textres="item_label_range" />
+			</label_column>
+			<string_columnh name="ranges" />
+			
+			<label_column name="ac_label">
+				<static textres="item_label_ac" />
+			</label_column>
+			<number_columnh name="ac">
+				<delaykeyupdate />
+				<displaysign />
+			</number_columnh>
+			
+			<label_column name="checkpenalty_label">
+				<static textres="item_label_checkpenalty" />
+			</label_column>
+			<number_columnh name="checkpenalty">
+				<delaykeyupdate />
+				<displaysign />
+			</number_columnh>
+			
+			<label_column name="speedpenalty_label">
+				<static textres="item_label_speedpenalty" />
+			</label_column>
+			<number_columnh name="speedpenalty">
+				<delaykeyupdate />
+				<displaysign />
+			</number_columnh>
+			
+			<label_column name="fumbledie_label">
+				<static textres="item_label_fumbledie" />
+			</label_column>
+			<string_columnh name="fumbledie" />
+			
+			<line_column name="divider4" />
+				
+			<ft_columnh name="description" />
+		</sheetdata>
+	</windowclass>
+</root>

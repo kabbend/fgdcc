@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+ 
+<root>
+	<windowclass name="npc">
+		<frame>recordsheet</frame>
+		<placement>
+			<size width="460" height="560" />
+		</placement>
+		<sizelimits>
+			<minimum width="460" height="400" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_npc</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<script file="campaign/scripts/npc.lua" />
+		<sheetdata>
+			<sub_record_header name="header">
+				<class>npc_header</class>
+			</sub_record_header>
+
+			<frame_record_content_tabbed name="contentframe" />
+
+			<subwindow_record name="main_creature">
+				<class>npc_combat</class>
+			</subwindow_record>			
+			<ft_record name="notes">
+				<anchored to="contentframe" position="over" />
+				<empty textres="ft_empty" />
+				<invisible />
+			</ft_record>
+
+			<scrollbar_record>
+				<target>main_creature</target>
+			</scrollbar_record>
+			<scrollbar_record>
+				<target>notes</target>
+			</scrollbar_record>
+
+			<tabs_recordsheet>
+				<tab>
+					<icon>tab_main</icon>
+					<subwindow>main_creature</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_notes</icon>
+					<subwindow>notes</subwindow>
+				</tab>
+			</tabs_recordsheet>
+			
+			<resize_recordsheet />
+			<close_recordsheet />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="npc_header" merge="join">
+		<margins control="0,0,0,2" />
+	</windowclass>
+
+	<windowclass name="npc_combat">
+		<margins control="0,0,0,2" />
+		<script file="campaign/scripts/npc_main.lua" />
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<label_column name="nonid_name_label">
+				<static textres="npc_label_unidentified" />
+			</label_column>
+			<string_columnh name="nonid_name" />
+	
+			<label_column name="init_label">
+				<static textres="npc_label_init" />
+			</label_column>
+			<number_npc_init name="init" />
+			
+			<label_column name="atk_label">
+				<static textres="npc_label_atk" />
+			</label_column>
+			<string_columnh name="atk">
+				<actortype>npc</actortype>
+				<actorpath>..</actorpath>
+				<script file="common/scripts/string_attackline.lua" />
+			</string_columnh>		
+			
+			<label_column name="crittable_label">
+				<static textres="npc_label_crittable" />
+			</label_column>
+			<string_columnh name="crittable" />
+			
+			<label_column name="ac_label">
+				<static textres="npc_label_ac" />
+			</label_column>
+			<string_columnh name="ac" />
+			
+			<label_column name="hd_label">
+				<static textres="npc_label_hd" />
+			</label_column>
+			<string_columnh name="hd" />
+			
+			<number_npc_hd name="hd_short" />
+			
+			<label_column name="hp_label">
+				<static textres="npc_label_hp" />
+			</label_column>
+			<number_column name="hp" />
+			
+			<label_column name="speed_label">
+				<static textres="npc_label_speed" />
+			</label_column>
+			<string_columnh name="speed" />
+			
+			<label_column name="actiondice_label">
+				<static textres="npc_label_actiondice" />
+			</label_column>
+			<string_columnh name="actiondice" />
+			
+			<label_column name="specialqualities_label">
+				<static textres="npc_label_sq" />
+				<tooltip textres="npc_tooltip_sq" />
+			</label_column>
+			<string_columnh name="specialqualities">
+				<script file="campaign/scripts/npc_skill.lua" />
+			</string_columnh>
+			
+			<label_column name="savingthrows_label">
+				<anchored>
+					<top offset="20" />
+				</anchored>
+				<static textres="npc_label_savingthrows" />
+			</label_column>
+			
+			<number_npc_save name="fortitudesave">
+				<anchored width="50" height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+					<left offset="97" />
+				</anchored>
+				<target>fortitude</target>
+			</number_npc_save>
+			<label_fieldtop name="fortitudesave_label">
+				<anchored to="fortitudesave" />
+				<static textres="npc_label_fort" />
+			</label_fieldtop>
+			
+			<number_npc_save name="reflexsave">
+				<anchored to="fortitudesave" width="50" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<target>reflex</target>
+			</number_npc_save>
+			<label_fieldtop name="reflexsave_label">
+				<anchored to="reflexsave" />
+				<static textres="npc_label_ref" />
+			</label_fieldtop>
+			
+			<number_npc_save name="willpowersave">
+				<anchored to="fortitudesave" width="50" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<target>willpower</target>
+			</number_npc_save>
+			<label_fieldtop name="willpowersave_label">
+				<anchored to="willpowersave" />
+				<static textres="npc_label_will" />
+			</label_fieldtop>			
+			
+			<label_column name="alignment_label">
+				<static textres="npc_label_alignment" />
+			</label_column>
+			<string_columnh name="alignment" />
+			
+			<line_column />	
+			
+			<label_column name="type_label">
+				<static textres="npc_label_type" />
+			</label_column>
+			<string_columnh name="type" />
+			
+			<label_column name="size_label">
+				<static textres="npc_label_size" />
+			</label_column>
+			<string_columnh name="size" />
+			
+			<line_column />	
+			
+			<number_npc_abilityscore name="strength" source="abilities.strength.score">
+				<anchored merge="replace" width="40" height="30">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="12" />
+					<left anchor="center" offset="-202" />
+				</anchored>
+				<target>strength</target>
+			</number_npc_abilityscore>
+			<label_npc_abilityscore>
+				<anchored to="strength" />
+				<static textres="STR" />
+			</label_npc_abilityscore>
+			<hn name="strength_bonus" source="abilities.strength.bonus" />
+			<string_npc_abilitymodtext name="strength_modtext">
+				<anchored to="strength" />
+			</string_npc_abilitymodtext>
+			<button_npcabilitycheck>
+				<anchored to="strength" />
+				<target>strength</target>
+			</button_npcabilitycheck>		
+			
+			<number_npc_abilityscore name="agility" source="abilities.agility.score">
+				<anchored merge="replace" to="strength" width="40" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>agility</target>
+			</number_npc_abilityscore>
+			<label_npc_abilityscore>
+				<anchored to="agility" />
+				<static textres="AGI" />
+			</label_npc_abilityscore>
+			<hn name="agility_bonus" source="abilities.agility.bonus" />
+			<string_npc_abilitymodtext name="agility_modtext">
+				<anchored to="agility" />
+			</string_npc_abilitymodtext>
+			<button_npcabilitycheck>
+				<anchored to="agility" />
+				<target>agility</target>
+			</button_npcabilitycheck>
+
+			<number_npc_abilityscore name="stamina" source="abilities.stamina.score">
+				<anchored merge="replace" to="strength" width="40" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>stamina</target>
+			</number_npc_abilityscore>
+			<label_npc_abilityscore>
+				<anchored to="stamina" />
+				<static textres="STA" />
+			</label_npc_abilityscore>
+			<hn name="stamina_bonus" source="abilities.stamina.bonus" />
+			<string_npc_abilitymodtext name="stamina_modtext">
+				<anchored to="stamina" />
+			</string_npc_abilitymodtext>
+			<button_npcabilitycheck>
+				<anchored to="stamina" />
+				<target>stamina</target>
+			</button_npcabilitycheck>
+
+			<number_npc_abilityscore name="personality" source="abilities.personality.score">
+				<anchored merge="replace" to="strength" width="40" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>personality</target>
+			</number_npc_abilityscore>
+			<label_npc_abilityscore>
+				<anchored to="personality" />
+				<static textres="PER" />
+			</label_npc_abilityscore>
+			<hn name="personality_bonus" source="abilities.personality.bonus" />
+			<string_npc_abilitymodtext name="personality_modtext">
+				<anchored to="personality" />
+			</string_npc_abilitymodtext>
+			<button_npcabilitycheck>
+				<anchored to="personality" />
+				<target>personality</target>
+			</button_npcabilitycheck>
+
+			<number_npc_abilityscore name="intelligence" source="abilities.intelligence.score">
+				<anchored merge="replace" to="strength" width="40" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>intelligence</target>
+			</number_npc_abilityscore>
+			<label_npc_abilityscore>
+				<anchored to="intelligence" />
+				<static textres="INT" />
+			</label_npc_abilityscore>
+			<hn name="intelligence_bonus" source="abilities.intelligence.bonus" />
+			<string_npc_abilitymodtext name="intelligence_modtext">
+				<anchored to="intelligence" />
+			</string_npc_abilitymodtext>
+			<button_npcabilitycheck>
+				<anchored to="intelligence" />
+				<target>intelligence</target>
+			</button_npcabilitycheck>
+
+			<number_npc_abilityscore name="luck" source="abilities.luck.score">
+				<anchored merge="replace" to="strength" width="40" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>luck</target>
+			</number_npc_abilityscore>
+			<label_npc_abilityscore>
+				<anchored to="luck" />
+				<static textres="LUCK" />
+			</label_npc_abilityscore>
+			<hn name="luck_bonus" source="abilities.luck.bonus" />
+			<string_npc_abilitymodtext name="luck_modtext">
+				<anchored to="luck" />
+			</string_npc_abilitymodtext>
+			<button_npcabilitycheck>
+				<anchored to="luck" />
+				<target>luck</target>
+			</button_npcabilitycheck>
+				
+			<line_column>
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="12" />
+				</anchored>
+			</line_column>
+			
+			<label_column name="languages_label">
+				<static textres="npc_label_languages" />
+			</label_column>
+			<string_columnh name="languages" />
+
+			<label_column name="treasure_label">
+				<static textres="npc_label_treasure" />
+			</label_column>
+			<string_columnh name="treasure" />
+		</sheetdata>
+	</windowclass>
+</root>

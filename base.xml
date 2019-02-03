@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root version="3.0.9" release="29" logo="logo.png">
+	<announcement text="DCCRPG ruleset k.01 by kabbend" font="emotefont" />
+	<announcement text="DCC RPG is copyright 2012 Goodman Games. Dungeon Crawl Classics is a trademark of Goodman Games. DCC RPG is published under the Open Game License. Refer to the OGL for additional information." font="emotefont" />
+	
+	<!-- Attributes -->
+	<description>
+		<text>DCC RPG ruleset</text>
+		<author>kabbend</author>
+		<website></website>
+	</description>
+
+	<!-- Layers -->
+	<importruleset source="CoreRPG" />
+	
+	<!-- Tabletop settings -->
+	<includefile source="gameelements.xml" />
+
+	<!-- Graphics -->
+	<includefile source="graphics/graphics_fonts.xml" />
+	<includefile source="graphics/graphics_frames.xml" />
+	<includefile source="graphics/graphics_icons.xml" />
+	<includefile source="graphics/graphics_buttons.xml" />
+	<includefile source="graphics/graphics_radial.xml" />
+	
+	<!-- Strings -->
+	<includefile source="strings/strings_dccrpg.xml" />
+
+	<!-- Common -->
+	<includefile source="common/template_common.xml" />
+	<includefile source="common/template_buttons.xml" />
+	<includefile source="common/template_windows.xml" />
+	<includefile source="common/template_records.xml" />
+	
+	<!-- Desktop -->
+	<script name="GmIdentityManager" file="desktop/scripts/manager_gmidentity.lua" />
+	<script name="LibraryDataDCC" file="scripts/data_library_dcc.lua" />
+	<script name="OptionsDCC" file="scripts/data_options_dcc.lua" />
+	<includefile source="desktop/desktop_classes.xml" />
+	<includefile source="desktop/desktop_local.xml" />
+
+	<!-- Utility -->
+	<includefile source="utility/template_utility.xml" />
+	<includefile source="utility/utility_modifiers.xml" />
+	<includefile source="utility/utility_effects.xml" />
+
+	<!-- Reference -->
+	<includefile source="ref/template_ref.xml" />
+	<includefile source="ref/ref_equipment.xml" />
+	<includefile source="ref/ref_equipment_list.xml" />
+	<includefile source="ref/ref_spells.xml" />
+	
+	<!-- Campaign Records -->
+	<includefile source="campaign/template_campaign.xml" />
+	<includefile source="campaign/template_char.xml" />
+	<includefile source="campaign/template_power.xml" />
+	
+	<includefile source="campaign/record_char.xml" />
+	<includefile source="campaign/record_char_main.xml" />
+	<includefile source="campaign/record_char_skills.xml" />
+	<includefile source="campaign/record_char_abilities.xml" />
+	<includefile source="campaign/record_char_inventory.xml" />
+	<includefile source="campaign/record_char_notes.xml" />
+	<includefile source="campaign/record_char_actions.xml" />
+	<includefile source="campaign/record_char_weapon.xml" />
+	<includefile source="campaign/record_ability.xml" />
+	<includefile source="campaign/record_class.xml" />
+	<script name="CharManager" file="campaign/scripts/manager_char.lua" />
+
+	<includefile source="campaign/record_image.xml" />
+	<includefile source="campaign/record_npc.xml" />
+	<includefile source="campaign/record_encounter.xml" />
+	<includefile source="campaign/record_item.xml" />
+	<includefile source="campaign/record_quest.xml" />
+
+	<includefile source="campaign/record_class.xml" />	
+	<includefile source="campaign/record_power.xml" />
+	<includefile source="campaign/record_power_roll.xml" />
+	<includefile source="campaign/record_skill.xml" />
+
+	<!-- Combat tracker -->
+	<includefile source="ct/template_ct.xml" />
+	<includefile source="ct/ct_host.xml" />
+	<includefile source="ct/ct_client.xml" />
+
+	<!-- Party sheet -->
+	<includefile source="ps/template_ps.xml" />
+	<includefile source="ps/ps.xml" />
+	<includefile source="ps/ps_main.xml" />
+	<includefile source="ps/ps_xp.xml" />
+	<script name="PartyManager2" file="ps/scripts/manager_ps2.lua" />
+	
+	<!-- High-level scripts -->
+	<script name="DataCommon" file="scripts/data_common.lua" />
+	<script name="GameSystem" file="scripts/manager_gamesystem.lua" />
+	
+	<script name="ActorManager2" file="scripts/manager_actor2.lua" />
+	<script name="CombatManager" file="scripts/manager_combat.lua" />
+	<script name="CombatManager2" file="scripts/manager_combat2.lua" />
+	<script name="EffectManagerDCC" file="scripts/manager_effect_dcc.lua" />
+	<script name="ItemManager2" file="scripts/manager_item2.lua" />
+	<script name="PowerManager" file="scripts/manager_power.lua" />
+	<script name="TokenManager2" file="scripts/manager_token2.lua" />
+
+	<script name="ActionsManager2" file="scripts/manager_actions2.lua" />
+	<script name="ActionGeneral" file="scripts/manager_action_general.lua" />
+
+	<script name="ActionAttack" file="scripts/manager_action_attack.lua" />		
+	<script name="ActionCheck" file="scripts/manager_action_check.lua" />
+	<script name="ActionCritical" file="scripts/manager_action_critical.lua" />
+	<script name="ActionDamage" file="scripts/manager_action_damage.lua" />
+	<script name="ActionDeed" file="scripts/manager_action_deed.lua" />
+	<script name="ActionHeal" file="scripts/manager_action_heal.lua" />
+	<script name="ActionFumble" file="scripts/manager_action_fumble.lua" />
+	<script name="ActionInit" file="scripts/manager_action_init.lua" />
+	<script name="ActionPower" file="scripts/manager_action_power.lua" />
+	<script name="ActionSave" file="scripts/manager_action_save.lua" />
+	<script name="ActionSkill" file="scripts/manager_action_skill.lua" />
+</root>

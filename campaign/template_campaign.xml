@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="button_item_templates">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="80">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="item_button_templates" />
+			<script>
+				function onButtonPress()
+					Interface.openWindow("masterindex", "itemtemplate");
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_item_armor">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="80">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="item_button_armor" />
+			<script>
+				function onButtonPress()
+					local w = Interface.findWindow("reference_groupedlist", "reference.armor");
+					if w then
+						Interface.toggleWindow("reference_groupedlist", "reference.armor");
+					else
+						w = Interface.openWindow("reference_groupedlist", "reference.armor");
+						w.init({ sRecordType = "item", sListView = "armor" });
+					end
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_item_weapons">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="80">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="item_button_weapons" />
+			<script>
+				function onButtonPress()
+					local w = Interface.findWindow("reference_groupedlist", "reference.weapon");
+					if w then
+						Interface.toggleWindow("reference_groupedlist", "reference.weapon");
+					else
+						w = Interface.openWindow("reference_groupedlist", "reference.weapon");
+						w.init({ sRecordType = "item", sListView = "weapon" });
+					end
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_npc_letter">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="80">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="npc_button_letter" />
+			<script>
+				function onButtonPress()
+					local w = Interface.findWindow("reference_groupedlist", "reference.npcdatabyletter");
+					if w then
+						Interface.toggleWindow("reference_groupedlist", "reference.npcdatabyletter");
+					else
+						w = Interface.openWindow("reference_groupedlist", "reference.npcdatabyletter");
+						w.init({ sRecordType = "npc", sListView = "byletter" });
+					end
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_npc_hd">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="80">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="npc_button_hd" />
+			<script>
+				function onButtonPress()
+					local w = Interface.findWindow("reference_groupedlist", "reference.npcdatabycr");
+					if w then
+						Interface.toggleWindow("reference_groupedlist", "reference.npcdatabycr");
+					else
+						w = Interface.openWindow("reference_groupedlist", "reference.npcdatabycr");
+						w.init({ sRecordType = "npc", sListView = "byhd" });
+					end
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_npc_type">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="80">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="npc_button_type" />
+			<script>
+				function onButtonPress()
+					local w = Interface.findWindow("reference_groupedlist", "reference.npcdatabytype");
+					if w then
+						Interface.toggleWindow("reference_groupedlist", "reference.npcdatabytype");
+					else
+						w = Interface.openWindow("reference_groupedlist", "reference.npcdatabytype");
+						w.init({ sRecordType = "npc", sListView = "bytype" });
+					end
+				end
+			</script>
+		</button_text_sm>
+	</template>
+
+	<windowclass name="masterindex" merge="join">
+		<sheetdata>
+			<masterindex_list name="list">
+				<anchored>
+					<bottom offset="-70" />
+				</anchored>
+			</masterindex_list>
+		</sheetdata>
+	</windowclass>
+	<windowclass name="parcel_header" merge="join">
+		<margins control="0,0,0,2" />
+	</windowclass>
+	<windowclass name="table_header" merge="join">
+		<margins control="0,0,0,2" />
+	</windowclass>
+	
+	<template name="sub_record_header">
+		<subwindow>
+			<anchored>
+				<top offset="10" />
+				<left offset="10" />
+				<right offset="-25" />
+			</anchored>
+			<frame name="headergray" offset="5,5,20,5" />
+			<activate />
+			<fastinit />
+		</subwindow>
+	</template>
+	<template name="frame_record_content">
+		<genericcontrol name="contentframe">
+			<anchored>
+				<top parent="header" anchor="bottom" offset="7" />
+				<left offset="15" />
+				<right offset="-20" />
+				<bottom offset="-20" />
+			</anchored>
+			<disabled />
+		</genericcontrol>
+	</template>
+	<template name="frame_record_content_tabbed">
+		<genericcontrol name="contentframe">
+			<anchored>
+				<top parent="header" anchor="bottom" offset="7" />
+				<left offset="15" />
+				<right offset="-30" />
+				<bottom offset="-20" />
+			</anchored>
+			<disabled />
+		</genericcontrol>
+	</template>
+	<template name="area_parcel_content">
+		<genericcontrol name="contentframe">
+			<anchored>
+				<top parent="header" anchor="bottom" offset="22" />
+				<left offset="25" />
+				<right offset="-25" />
+				<bottom offset="-25" />
+			</anchored>
+			<disabled />
+		</genericcontrol>
+	</template>
+	<template name="frame_parcel">
+		<genericcontrol>
+			<frame name="groupbox" offset="15,15,20,15" />
+		</genericcontrol>
+	</template>
+	
+	<template name="button_toggledetail">
+		<buttoncontrol>
+			<anchored width="20" height="20" />
+			<state icon="button_details" />
+			<state icon="button_details_down" />
+			<script>
+				function onValueChanged()
+					if window.toggleDetail then
+						window.toggleDetail();
+					end
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+	
+ 	<template name="label_abilityscore">
+		<label_fieldtop>
+			<anchored offset="-2,-6" />
+			<frame name="abilityscore" />
+		</label_fieldtop>
+	</template>
+	<template name="number_abilityscore">
+		<basicnumber>
+			<default>10</default>
+			<script file="campaign/scripts/number_abilityscore.lua" />
+		</basicnumber>
+	</template>
+	<template name="string_abilitymodtext">
+		<stringcontrol>
+			<anchored position="below" offset="-8,-5" />
+			<frame name="abilityscore" />
+			<font>sheetlabelmini</font>
+			<static />
+			<center />
+		</stringcontrol>
+	</template>
+	
+	<template name="label_npc_abilityscore">
+		<label_abilityscore />
+	</template>
+	<template name="number_npc_abilityscore">
+		<number_abilityscore />
+	</template>
+	<template name="string_npc_abilitymodtext">
+		<string_abilitymodtext />
+	</template>
+	<template name="button_npcabilitycheck">
+		<buttoncontrol>
+			<anchored position="righthigh" offset="0,5" width="15" height="15" />
+			<state frame="abilityscore" text="C" font="" />
+			<script>
+				function action(draginfo)
+					local rActor = ActorManager.getActor("", window.getDatabaseNode());
+					ActionCheck.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					action(draginfo);
+					return true;
+				end
+				
+				function onButtonPress()
+					action();
+					return true;
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+	<template name="number_npc_init">
+		<number_column>
+			<displaysign />
+			<script>
+				function action(draginfo)
+					local rActor = ActorManager.getActor("npc", window.getDatabaseNode());
+					ActionInit.performRoll(draginfo, rActor);
+
+					return true;
+				end
+				
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+			</script>
+		</number_column>
+	</template>	
+	<template name="number_npc_save">
+		<basicnumber>
+			<displaysign />
+			<nodrop />
+			<script>
+				function action(draginfo)
+					local rActor = ActorManager.getActor("npc", window.getDatabaseNode());
+					ActionSave.performRoll(draginfo, rActor, self.target[1]);
+					
+					return true;
+				end
+				
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+					
+				function onDoubleClick(x, y)
+					return action();
+				end
+			</script>
+		</basicnumber>
+	</template>	
+	<template name="number_npc_hd">
+		<basicnumber>
+			<anchored to="hd" position="lefthigh" offset="12,2" width="20" />
+			<invisible />
+			<script>
+				function onInit()
+					update();
+					DB.addHandler(DB.getPath(window.getDatabaseNode(), "hd"), "onUpdate", update);
+				end
+				
+				function onClose()
+					DB.removeHandler(DB.getPath(window.getDatabaseNode(), "hd"), "onUpdate", update);
+				end
+				
+				function update()
+					local sHD = DB.getValue(window.getDatabaseNode(), "hd");
+					local nHD = tonumber(sHD:match("^(%d*)d+")) or 0;
+
+					if nHD then
+						setValue(nHD);
+					end
+				end
+			</script>
+		</basicnumber>
+	</template>
+	
+	<template name="list_editor">
+		<windowlist name="list">
+			<anchored>
+				<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+				<left />
+				<right />
+			</anchored>
+			<allowdelete />
+			<child></child>
+			<child><backcolor>1A40301E</backcolor></child>
+			<noscroll />
+			<script>
+				function onInit()
+					registerMenuItem(Interface.getString("list_menu_createitem"), "insert", 5);
+				end
+				
+				function onMenuSelection(selection)
+					if selection == 5 then
+						self.addEntry(true);
+					end
+				end
+				
+				function onListChanged()
+					update();
+				end
+
+				function update()
+					local bEditMode = (window.list_iedit.getValue() == 1);
+					for _,w in pairs(getWindows()) do
+						w.idelete.setVisibility(bEditMode);
+					end
+				end
+				
+				function addEntry(bFocus)
+					return createWindow();
+				end
+			</script>
+		</windowlist>
+	</template>
+	
+	<template name="sub_charsheet">
+		<subwindow>
+			<anchored to="contentanchor">
+				<top parent="name" anchor="bottom" offset="2" />
+				<left />
+				<right />
+				<bottom parent="" offset="-20" />
+			</anchored>
+		</subwindow>
+	</template>
+</root>

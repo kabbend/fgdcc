@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charsheet_actions">
+		<script>
+			function onDrop(x, y, draginfo)
+				if contents.subwindow.actions.subwindow.onDrop(x, y, draginfo) then
+					return true;
+				end
+				if contents.subwindow.weapons.onDrop(x, y, draginfo) then
+					return true;
+				end
+				return false;
+			end
+		</script>
+		<sheetdata>
+			<button_iedit name="actions_iedit">
+				<anchored position="insidebottomright" offset="10,10" />
+				<tooltip textres="char_tooltip_actionedit" />
+				<script>
+					function onValueChanged()
+						local bEditMode = (getValue() == 1);
+						
+						window.powers_iadd.setVisible(bEditMode);
+						window.weapons_iadd.setVisible(bEditMode);
+
+						window.powermode_label.setVisible(false);
+						window.powermode.setVisible(false);
+						window.powerdisplay_label.setVisible(false);
+						window.powerdisplaymode.setVisible(false);
+						if bEditMode then
+							DB.setValue(window.getDatabaseNode(), "powermode", "string", "standard");
+							DB.setValue(window.getDatabaseNode(), "powerdisplaymode", "string", "");
+						end
+
+						window.contents.subwindow.weapons.update();
+						window.contents.subwindow.actions.subwindow.updateDisplay(bEditMode);
+					end
+				</script>
+			</button_iedit>
+			<buttoncontrol name="powers_iadd">
+				<anchored to="actions_iedit" position="lefthigh" offset="5,0" width="20" height="20" />
+				<icon normal="button_star" pressed="button_star_down" />
+				<tooltip textres="char_tooltip_actionaddpower" />
+				<invisible />
+				<script>
+					function onButtonPress()
+						window.contents.subwindow.actions.subwindow.addPower(true);
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="weapons_iadd">
+				<anchored to="powers_iadd" position="lefthigh" offset="5,0" width="20" height="20" />
+				<icon normal="button_weapon" pressed="button_weapon_down" />
+				<tooltip textres="char_tooltip_actionaddweapon" />
+				<invisible />
+				<script>
+					function onButtonPress()
+						window.contents.subwindow.weapons.addEntry(true);
+					end
+				</script>
+			</buttoncontrol>
+
+			<subwindow name="contents">
+				<anchored>
+					<bottom offset="-40" />
+					<top offset="0" />
+					<left offset="0" />
+					<right offset="-15" />
+				</anchored>
+				<class>charsheet_actions_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+			<scrollbar_charcontents />
+
+			<label name="powermode_label">
+				<anchored position="insidebottomleft" offset="10,10" />
+				<static textres="power_label_mode" />
+				<invisible />
+			</label>
+			<button_stringcycler name="powermode">
+				<anchored to="powermode_label" position="righthigh" offset="10,0" width="80" />
+				<parameters>
+					<labelsres>power_label_modeprep|power_label_modecombat</labelsres>
+					<values>preparation|combat</values>
+					<defaultlabelres>power_label_modestd</defaultlabelres>
+				</parameters>
+				<script>
+					function onValueChanged()
+						window.contents.subwindow.onModeChanged();
+					end
+				</script>
+				<invisible />
+			</button_stringcycler>
+
+			<label name="powerdisplay_label">
+				<anchored to="powermode" position="righthigh" offset="15,0" />
+				<static textres="power_label_display" />
+				<invisible />
+			</label>
+			<button_stringcycler name="powerdisplaymode">
+				<anchored to="powerdisplay_label" position="righthigh" offset="10,0" width="80" />
+				<parameters>
+					<labelsres>power_label_displaysummary|power_label_displayaction</labelsres>
+					<values>summary|action</values>
+					<defaultlabelres>power_label_displaygroup</defaultlabelres>
+				</parameters>
+				<script>
+					function onValueChanged()
+						window.contents.subwindow.actions.subwindow.onDisplayChanged();
+					end
+				</script>
+				<invisible />
+			</button_stringcycler>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_actions_contents">
+		<margins control="0,0,0,2" />
+		<script>
+			function onModeChanged()
+				weapons.onModeChanged();
+				
+				spellslots_prep.subwindow.onModeChanged();
+				actions.subwindow.onModeChanged();
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+ 			
+			<label_charframetop name="weapontitle">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-10" />
+				</anchored>
+				<icons>char_attacks</icons>
+				<static textres="char_label_weapon" />
+				<script>
+					function onClickDown()
+						return true;
+					end
+					
+					function onClickRelease()
+						local bVisible = window.weapons.isVisible();
+						if bVisible then
+							setFont("subwindowsmalltitle_disabled");
+							window.weapons.setVisible(false);
+							window.weaponrolls.setVisible(false);
+						else
+							setFont("subwindowsmalltitle");
+							window.weapons.setVisible(true);
+							window.weaponrolls.setVisible(true);
+						end
+						return true;
+					end
+				</script>
+			</label_charframetop>
+ 			<buttoncontrol name="weapons_global_detail">
+				<anchored to="weapontitle" position="insidetopright" offset="20,1" width="20" height="20" />
+				<state icon="button_details" pressed="button_details_down" />
+				<script>
+					function onButtonPress()
+						Interface.openWindow("char_weaponmeta", window.getDatabaseNode());
+					end
+				</script>
+			</buttoncontrol>
+				
+			<subwindow name="weaponrolls">
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="5" />
+					<left />
+					<right />
+				</anchored>
+				<class>weapon_rolls</class>
+				<activate />
+				<fastinit />
+				<invisible />
+			</subwindow>
+			
+			<list_charweapon name="weapons">
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="2" />
+					<left offset="10" />
+					<right offset="-5" />
+				</anchored>
+				<class>char_weapon</class>
+				<noscroll />
+			</list_charweapon>
+ 			
+			<label_charframetop name="magictitle">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-10" />
+				</anchored>
+				<icons>char_powers</icons>
+				<static textres="power_label_spellslots" />
+				<script>
+					function onClickDown()
+						return true;
+					end
+					
+					function onClickRelease()
+						local bVisible = window.magic.isVisible();
+						if bVisible then
+							setFont("subwindowsmalltitle_disabled");
+							window.magic.setVisible(false);
+							window.spellslots_prep.setVisible(false);
+						else
+							setFont("subwindowsmalltitle");
+							window.magic.setVisible(true);
+							local sMode = DB.getValue(window.getDatabaseNode(), "powermode", "");
+							if sMode == "preparation" then
+								window.spellslots_prep.setVisible(true);
+							else
+								window.spellslots_prep.setVisible(false);
+							end
+						end
+						return true;
+					end
+				</script>
+			</label_charframetop>
+			
+			<subwindow name="spellslots_prep">
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="10" />
+					<left />
+					<right />
+				</anchored>
+				<class>power_slots_prep</class>
+				<activate />
+				<fastinit />
+				<invisible />
+			</subwindow>
+					
+			<subwindow name="magic">
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="2" />
+					<left />
+					<right />
+				</anchored>
+				<class>power_magic</class>
+				<activate />
+				<fastinit />
+				<invisible />
+			</subwindow>
+		
+			<subwindow name="actions">
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="5" />
+					<left />
+					<right />
+				</anchored>
+				<activate />
+				<fastinit />
+				<class>power_page</class>
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+	
+ 	<windowclass name="char_weaponmeta">
+		<frame>charsheethelper</frame>
+		<placement>
+			<size width="350" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="310" height="330" />
+			<dynamic />
+		</sizelimits>
+		<nodelete />
+		<playercontrol />
+		<sheetdata>
+			<windowtitlebar_char name="title">
+				<prefix>char_weaponmeta_title</prefix>
+			</windowtitlebar_char>
+			<anchor_title_charsheethelper name="contentanchor" />
+			
+			<genericcontrol name="contentframe">
+				<anchored to="contentanchor">
+					<top anchor="bottom" offset="0" />
+					<left />
+					<right />
+					<bottom parent="" offset="-30" />
+				</anchored>
+			</genericcontrol>
+
+			<subwindow_record name="main">
+				<class>char_weaponmeta_main</class>
+				<activate />
+			</subwindow_record>
+
+			<scrollbar_record>
+				<target>main</target>
+			</scrollbar_record>
+
+			<resize_charsheethelper />
+			<close_charsheethelper />
+		</sheetdata>
+	</windowclass>
+	<windowclass name="char_weaponmeta_main">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<header_column name="label_deed">
+				<static textres="char_label_mightydeed" />
+				<center />
+			</header_column>
+<!--	
+			<basicdice name="deeddie">
+				<anchored width="60" height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+					<left offset="5" />
+				</anchored>
+			</basicdice>	
+ 			<label_fieldtop name="label_deeddie">
+				<anchored to="deeddie" />
+				<static textres="char_label_deeddie" />
+			</label_fieldtop>	
+			<label name="label_deedplus">
+				<anchored to="deeddie" position="righthigh" offset="5,0" width="10" />
+				<static>+</static>
+				<center />
+			</label>	
+			<basicnumber name="deedbonus">
+				<anchored to="label_deedplus" position="righthigh" offset="5,0" width="40" height="20"/>
+				<hideonvalue>0</hideonvalue>
+			</basicnumber>
+ 			<label_fieldtop name="label_deedbonus">
+				<anchored to="deedbonus" />
+				<static textres="char_label_deedbonus" />
+			</label_fieldtop>  		
+-->			
+			<basicnumber name="deedresult">
+				<anchored to="label_deed" position="belowleft" offset="15,20" width="40" height="20" />
+				<hideonvalue>0</hideonvalue>
+				<min>0</min>
+			</basicnumber>
+			<label_fieldtop name="label_deedresult">
+				<anchored to="deedresult" />
+				<static textres="char_label_deedresult" />
+			</label_fieldtop>
+				
+			<header_column name="label_crit">
+				<anchored width="60" height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="50" />
+					<left offset="5" />
+				</anchored>
+				<static textres="char_label_crit" />
+				<center />
+			</header_column>
+		
+			<basicdice name="critdie">
+				<anchored width="60" height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+					<left offset="5" />
+				</anchored>
+			</basicdice>
+ 			<label_fieldtop name="label_critdie">
+				<anchored to="critdie" />
+				<static textres="char_label_critdie" />
+			</label_fieldtop> 
+ 			<label name="label_critplus">
+				<anchored to="critdie" position="righthigh" offset="5,0" width="10" height="20" />
+				<static>+</static>
+				<center />
+			</label>
+			<simplenumber name="critstat" source="abilities.luck.bonus">
+				<anchored to="label_critplus" position="righthigh" offset="5,0" width="40" height="20" />
+				<frame name="fieldlight" offset="7,5,7,5" />
+				<readonly />
+			</simplenumber>
+ 			<label_fieldtop name="label_critstat">
+				<anchored to="critstat" />
+				<static textres="char_label_critstat" />
+			</label_fieldtop> 
+ 			<label name="label_critplus2">
+				<anchored to="critstat" position="righthigh" offset="5,0" width="10" height="20" />
+				<static>+</static>
+				<center />
+			</label>
+			<basicnumber name="critbonus">
+				<anchored to="label_critplus2" position="righthigh" offset="5,0" width="40" height="20" /> 
+				<hideonvalue>0</hideonvalue>
+			</basicnumber>		
+ 			<label_fieldtop name="label_critbonus">
+				<anchored to="critbonus" />
+				<static textres="char_label_critbonus" />
+			</label_fieldtop> 
+			
+			<button_stringcycler name="crittable">
+				<anchored to="label_crit" position="belowright" offset="15,20" width="40" height="20" />
+				<parameters>
+					<defaultlabelres>i</defaultlabelres>
+					<labelsres>ii|iii|iv|v</labelsres>
+					<values>II|III|IV|V</values>
+				</parameters>
+			</button_stringcycler>
+			<label_fieldtop name="label_crittable">
+				<anchored to="crittable" />
+				<static textres="char_label_crittable" />
+			</label_fieldtop>
+
+			<label name="label_critrange">
+				<anchored width="65" height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="10" />
+					<left offset="5" />
+				</anchored>
+				<static textres="char_label_critrange" />
+			</label>					
+			<basicnumber name="critrange">
+				<anchored to="label_critrange" position="righthigh" offset="15,0" width="40" height="20" />
+				<default>20</default>
+				<min>2</min>
+				<max>20</max>
+				<nodrag />
+			</basicnumber>		
+			
+			<header_column name="label_fumble">
+				<static textres="char_label_fumble" />
+				<center />
+			</header_column>
+		
+			<basicdice name="fumbledie">
+				<anchored width="60" height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+					<left offset="5" />
+				</anchored>
+			</basicdice>
+ 			<label_fieldtop name="label_fumbledie">
+				<anchored to="fumbledie" />
+				<static textres="char_label_fumbledie" />
+			</label_fieldtop> 
+ 			<label name="label_fumbleplus">
+				<anchored to="fumbledie" position="righthigh" offset="5,0" width="10" height="20" />
+				<static>-</static>
+				<center />
+			</label>
+			<simplenumber name="fumblestat" source="abilities.luck.bonus">
+				<anchored to="label_fumbleplus" position="righthigh" offset="5,0" width="40" height="20" />
+				<frame name="fieldlight" offset="7,5,7,5" />
+				<readonly />
+			</simplenumber>
+ 			<label_fieldtop name="label_fumblestat">
+				<anchored to="fumblestat" />
+				<static textres="char_label_fumblestat" />
+			</label_fieldtop> 
+ 			<label name="label_fumbleplus2">
+				<anchored to="fumblestat" position="righthigh" offset="5,0" width="10" height="20" />
+				<static>+</static>
+				<center />
+			</label>
+			<basicnumber name="fumblebonus">
+				<anchored to="label_fumbleplus2" position="righthigh" offset="5,0" width="40" height="20" /> 
+				<hideonvalue>0</hideonvalue>
+			</basicnumber>		
+ 			<label_fieldtop name="label_fumblebonus">
+				<anchored to="fumblebonus" />
+				<static textres="char_label_fumblebonus" />
+			</label_fieldtop> 
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- Weapon Description sheets (non-editable) -->
+	<windowclass name="reference_weapon">
+		<frame>recordsheet</frame>
+		<placement>
+			<size width="350" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="300" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_weapon_header</class>
+			</sub_ref_header>
+
+			<frame_ref_content />
+			<sub_ref_content name="content">
+				<class>ref_weapon_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_recordsheet />
+			<close_recordsheet />
+		</sheetdata>
+	</windowclass>
+	<windowclass name="ref_weapon_header">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<link_record_header>
+				<class>reference_weapon</class>
+			</link_record_header>
+			<string_record_name_ref name="name" />
+			<label_item_reftype name="reftype" />
+		</sheetdata>
+	</windowclass>	
+	<windowclass name="ref_weapon_stats">
+		<margins control="0,0,0,7" />
+		<script>
+			function onInit()
+				OptionsManager.registerCallback("HREN", onOptionChanged);
+				onOptionChanged();
+			end
+
+			function onClose()
+				OptionsManager.unregisterCallback("HREN", onOptionChanged);
+			end
+
+			function onOptionChanged()
+				local sOptionHREN = OptionsManager.getOption("HREN");
+				local bShowVariant = (sOptionHREN == "variant");
+				weight_label.setVisible(bShowVariant);
+				weightwithsuffix.setVisible(bShowVariant);
+				weight_label.setVisible(bShowVariant);
+			end
+			
+			function onDrop(x, y, draginfo)
+				return ItemManager.handleAnyDrop(getDatabaseNode(), draginfo);
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<label_column name="cost_label">
+				<static textres="ref_label_listcost" />
+			</label_column>
+			<string_column_left name="cost">
+				<readonly />
+			</string_column_left>
+
+			<label_column name="weight_label">
+				<anchored to="cost_label" />
+				<static textres="item_label_weight" />
+			</label_column>
+			<stringc_column name="weightwithsuffix" />
+			<number_ref_weightwithsuffix name="weight" />
+				
+			<line_column />
+			
+			<label_column name="damage_label">
+				<static textres="ref_label_damage" />
+			</label_column>
+			<string_column name="damage">
+				<readonly />
+			</string_column>
+			
+			<label_column name="damagetype_label">
+				<static textres="ref_label_dmgtype" />
+			</label_column>
+			<string_columnh name="damagetype">
+				<readonly />
+			</string_columnh>
+				
+			<label_column name="ranges_label">
+				<static textres="ref_label_range" />
+			</label_column>
+			<string_columnh name="ranges">
+				<readonly />
+			</string_columnh>
+			
+			<line_column name="line_desc"/>
+			
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Armor Description sheets (non-editable) -->
+	<windowclass name="reference_armor">
+		<frame>recordsheet</frame>
+		<placement>
+			<size width="350" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="300" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_armor_header</class>
+			</sub_ref_header>
+
+			<frame_ref_content />
+			<sub_ref_content name="content">
+				<class>ref_armor_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+		
+			<resize_recordsheet />
+			<close_recordsheet />
+		</sheetdata>
+	</windowclass>
+	<windowclass name="ref_armor_header">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<link_record_header>
+				<class>reference_armor</class>
+			</link_record_header>
+			<string_record_name_ref name="name" />
+			<label_item_reftype name="reftype" />
+		</sheetdata>
+	</windowclass>	
+	<windowclass name="ref_armor_stats">
+		<margins control="0,0,0,7" />
+		<script>
+			function onInit()
+				OptionsManager.registerCallback("HREN", onOptionChanged);
+				onOptionChanged();
+			end
+
+			function onClose()
+				OptionsManager.unregisterCallback("HREN", onOptionChanged);
+			end
+
+			function onOptionChanged()
+				local sOptionHREN = OptionsManager.getOption("HREN");
+				local bShowVariant = (sOptionHREN == "variant");
+				weight_label.setVisible(bShowVariant);
+				weightwithsuffix.setVisible(bShowVariant);
+				weight_label.setVisible(bShowVariant);
+			end
+			
+			function onDrop(x, y, draginfo)
+				return ItemManager.handleAnyDrop(getDatabaseNode(), draginfo);
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<label_column name="cost_label">
+				<static textres="ref_label_listcost" />
+			</label_column>
+			<string_column_left name="cost">
+				<readonly />
+			</string_column_left>
+			
+			<label_column name="weight_label">
+				<anchored to="cost_label" />
+				<static textres="item_label_weight" />
+			</label_column>
+			<stringc_column name="weightwithsuffix" />
+			<number_ref_weightwithsuffix name="weight" />
+			
+			<line_column />
+			
+			<label_column name="bonus_label">
+				<static textres="item_label_bonus" />
+			</label_column>
+			<number_columnh name="bonus">
+				<displaysign />
+			</number_columnh>
+			
+			<label_column name="ac_label">
+				<static textres="item_label_ac" />
+			</label_column>
+			<number_column name="ac">
+				<displaysign />
+			</number_column>
+			
+			<label_column name="checkpenalty_label">
+				<static textres="ref_label_checkpenalty" />
+			</label_column>
+			<number_columnh name="checkpenalty">
+				<displaysign />
+				<readonly />
+			</number_columnh>
+			
+			<label_column name="speedpenalty_label">
+				<static textres="ref_label_speedpenalty" />
+			</label_column>
+			<number_column name="speedpenalty">
+				<readonly />
+			</number_column>
+			
+			<label_column name="fumbledie_label">
+				<static textres="ref_label_fumbledie" />
+			</label_column>
+			<string_column_left name="fumbledie">
+				<readonly />
+			</string_column_left>
+			
+			<line_column name="line_desc" />
+			
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Equipment Description sheets (non-editable) -->
+	<windowclass name="reference_equipment">
+		<frame>recordsheet</frame>
+		<placement>
+			<size width="350" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="300" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_equipment_header</class>
+			</sub_ref_header>
+
+			<frame_ref_content />
+			<sub_ref_content name="content">
+				<class>ref_equipment_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_recordsheet />
+			<close_recordsheet />
+		</sheetdata>
+	</windowclass>
+	<windowclass name="ref_equipment_header">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<link_record_header>
+				<class>reference_equipment</class>
+			</link_record_header>
+			<string_record_name_ref name="name" />
+			<label_item_reftype name="reftype" />
+		</sheetdata>
+	</windowclass>	
+	<windowclass name="ref_equipment_stats">
+		<margins control="0,0,0,7" />
+		<script>
+			function onInit()
+				OptionsManager.registerCallback("HREN", onOptionChanged);
+				onOptionChanged();
+			end
+
+			function onClose()
+				OptionsManager.unregisterCallback("HREN", onOptionChanged);
+			end
+
+			function onOptionChanged()
+				local sOptionHREN = OptionsManager.getOption("HREN");
+				local bShowVariant = (sOptionHREN == "variant");
+				weight_label.setVisible(bShowVariant);
+				weightwithsuffix.setVisible(bShowVariant);
+				weight_label.setVisible(bShowVariant);
+			end
+			
+			function onDrop(x, y, draginfo)
+				return ItemManager.handleAnyDrop(getDatabaseNode(), draginfo);
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_column name="cost_label">
+				<static textres="ref_label_listcost" />
+			</label_column>
+			<string_column_left name="cost">
+				<readonly />
+			</string_column_left>
+			
+			<label_column name="weight_label">
+				<anchored to="cost_label" />
+				<static textres="item_label_weight" />
+			</label_column>
+			<stringc_column name="weightwithsuffix" />
+			<number_ref_weightwithsuffix name="weight" />
+			
+			<line_column name="line_desc" />
+
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+		
+	<!-- Mounts and Related Gear Description sheets (non-editable) -->
+	<windowclass name="reference_mountsandrelatedgear">
+		<frame>recordsheet</frame>
+		<placement>
+			<size width="350" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="300" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_mountsandrelatedgear_header</class>
+			</sub_ref_header>
+
+			<frame_ref_content />
+			<sub_ref_content name="content">
+				<class>ref_mountsandrelatedgear_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_recordsheet />
+			<close_recordsheet />
+		</sheetdata>
+	</windowclass>
+	<windowclass name="ref_mountsandrelatedgear_header">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<link_record_header>
+				<class>reference_mountsandrelatedgear</class>
+			</link_record_header>
+			<string_record_name_ref name="name" />
+			<label_item_reftype name="reftype" />
+		</sheetdata>
+	</windowclass>
+	<windowclass name="ref_mountsandrelatedgear_stats">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_column name="cost_label">
+				<static textres="ref_label_listcost" />
+			</label_column>
+			<string_column_left name="cost">
+				<readonly />
+			</string_column_left>
+			
+			<label_column name="speed_label">
+				<static textres="item_label_speed" />
+			</label_column>
+			<string_columnh name="speed">
+				<readonly />
+			</string_columnh>
+			
+			<label_column name="carryingcapacity_label">
+				<static textres="item_label_carryingcapacity" />
+			</label_column>
+			<string_columnh name="carryingcapacity">
+				<readonly />
+			</string_columnh>
+			
+			<line_column name="line_desc" />
+
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+</root>

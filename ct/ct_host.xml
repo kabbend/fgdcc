@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="combattracker_host">
+		<frame>ctbox</frame>
+		<placement>
+			<size width="650" height="500" />
+		</placement>
+		<sizelimits>
+			<minimum width="650" height="400" />
+			<dynamic />
+		</sizelimits>
+		<softclose />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar name="title">
+				<resource>ct_window_title</resource>
+			</windowtitlebar>
+			<anchor_title_ctbox name="contentanchor" />
+
+			<anchor_ctbox_host_header />
+			<frame_ctbox_host_header_visibility />
+			<buttoncontrol name="button_global_visibility">
+				<anchored to="header_vis" position="insidetopleft" offset="-5,2" width="22" height="22" />
+				<state icon="visibilityoff" tooltipres="ct_tooltip_shownpcallon" />
+				<state icon="visibilityon" tooltipres="ct_tooltip_shownpcalloff" />
+				<script>
+					function onValueChanged()
+						window.list.toggleVisibility();
+					end
+				</script>
+			</buttoncontrol>
+			<frame_ctbox_host_header_labels />
+			<label_ct name="label_name">
+				<anchored to="header_labels" position="insidetopleft" offset="5,3">
+					<right offset="-175" />
+				</anchored>
+				<static textres="ct_label_name" />
+				<center />
+			</label_ct>
+			<label_ct name="label_init">
+				<anchored to="header_labels" position="insidetopright" offset="175,3" width="30" />
+				<static textres="init" />
+				<center />
+			</label_ct>
+			<label_ct name="label_hp">
+				<anchored to="header_labels" position="insidetopright" offset="135,3" width="30" />
+				<static textres="hp" />
+				<tooltip textres="ct_tooltip_hpmax" />
+				<center />
+			</label_ct>
+			<label_ct name="label_temp">
+				<anchored to="header_labels" position="insidetopright" offset="95,3" width="30" />
+				<static textres="ct_label_hptemp" />
+				<tooltip textres="ct_tooltip_hptemp" />
+				<center />
+			</label_ct>
+			<label_ct name="label_nonlethal">
+				<anchored to="header_labels" position="insidetopright" offset="55,3" width="30" />
+				<static textres="ct_label_nonlethal" />
+				<tooltip textres="ct_tooltip_nonlethal" />
+				<center />
+			</label_ct>
+			<label_ct name="label_wounds">
+				<anchored to="header_labels" position="insidetopright" offset="15,3" width="30" />
+				<static textres="ct_label_wounds" />
+				<tooltip textres="ct_tooltip_wounds" />
+				<center />
+			</label_ct>
+			<frame_ctbox_host_header_toggles />
+			<buttoncontrol name="button_global_targeting">
+				<anchored to="header_toggles" position="insidetopleft" offset="10,-3" width="35" height="32" />
+				<state icon="button_section_targeting" />
+				<state icon="button_section_targeting_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleTargeting();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_active">
+				<anchored to="header_toggles" position="insidetopleft" offset="35,-3" width="35" height="32" />
+				<state icon="button_sword" />
+				<state icon="button_sword_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleActive();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_defensive">
+				<anchored to="header_toggles" position="insidetopleft" offset="60,-3" width="35" height="32" />
+				<state icon="button_shield" />
+				<state icon="button_shield_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleDefensive();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_spacing">
+				<anchored to="header_toggles" position="insidetopleft" offset="85,-3" width="35" height="32" />
+				<state icon="button_space" />
+				<state icon="button_space_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleSpacing();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_effects">
+				<anchored to="header_toggles" position="insidetopleft" offset="117,-3" width="35" height="32" />
+				<state icon="button_effect" />
+				<state icon="button_effect_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleEffects();
+					end
+				</script>
+			</buttoncontrol>
+				
+			<list_ctbox_host />
+			<scrollbar_list />
+			
+			<button_ct_setactive />
+			<button_ct_nextactor />
+
+			<button_ct_faction_friend />
+			<button_ct_faction_neutral />
+			<button_ct_faction_foe />
+		
+			<button_ct_menu />
+
+			<label_ct_host_rounds />
+			<number_ct_host_rounds />
+			<button_ct_nextround />
+			
+			<resize_ctbox />
+			<helper_ct />
+			<close_ctbox />
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="ct_entry">
+		<margins control="0,0,0,5" />
+		<frame>ctentrybox</frame>
+		<sizelimits>
+			<minimum height="50" />
+		</sizelimits>
+		<script file="ct/scripts/ct_entry.lua" />
+		<sheetdata>
+			<hs name="tokenrefid" />
+			<hs name="tokenrefnode" />
+			<hs name="status" />
+
+			<spacer_ctentry_active_top name="active_spacer_top" />
+			
+			<button_ctentry_active name="active" />
+			<token_ctentry name="token" />
+			<button_ctentry_tokenvis name="tokenvis" />
+			<button_ctentry_isidentified name="isidentified" />
+			
+			<anchor_ctentry_right name="rightanchor" />
+			<button_ctentry_idelete name="idelete" />			
+			<link_ctentry name="link">
+				<anchored merge="replace" to="rightanchor" width="35" height="35">
+					<top relation="relative" offset="-8" />
+					<right anchor="left" relation="relative" offset="-8" />
+				</anchored>
+			</link_ctentry>
+
+			<button_ctentry_activateeffects name="activateeffects">
+				<anchored merge="replace" to="rightanchor" width="35" height="32">
+					<top relation="relative" />
+					<right anchor="left" relation="relative" offset="0" />
+				</anchored>
+			</button_ctentry_activateeffects>
+			<button_ctentry_activatespacing name="activatespacing">
+				<anchored merge="replace" to="rightanchor" width="35" height="32">
+					<top relation="relative" offset="2"/>
+					<right anchor="left" relation="relative" offset="3"/>
+				</anchored>
+			</button_ctentry_activatespacing>
+			<button_ctentry_activatedefensive name="activatedefensive">
+				<anchored merge="replace" to="rightanchor" width="35" height="32">
+					<top relation="relative" />
+					<right anchor="left" relation="relative" offset="10" />
+				</anchored>
+			</button_ctentry_activatedefensive>
+			<button_ctentry_activateactive name="activateactive">
+				<anchored merge="replace" to="rightanchor" width="35" height="32">
+					<top relation="relative" />
+					<right anchor="left" relation="relative" offset="10"/>
+				</anchored>
+			</button_ctentry_activateactive>
+			<button_ctentry_activatetargeting name="activatetargeting">
+				<anchored merge="replace" to="rightanchor" width="35" height="32">
+					<top relation="relative"/>
+					<right anchor="left" relation="relative" offset="10" />
+				</anchored>
+			</button_ctentry_activatetargeting>
+			<button_ctentry_friendfoe name="friendfoe">
+				<anchored merge="replace" to="rightanchor" width="35" height="32">
+					<top relation="relative"/>
+					<right anchor="left" relation="relative" offset="2" />
+				</anchored>
+			</button_ctentry_friendfoe>
+			
+			<number_ct_crosslink name="wounds">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<min value="0" />
+				<hideonvalue value="0" />
+				<tabtarget prev="nonlethal" next="init" />
+				<script>
+					function handleDrop(draginfo)
+						if draginfo.getType() == "number" then
+							local node = window.getDatabaseNode();
+							local rActor = ActorManager.getActorFromCT(node);
+							ActionDamage.applyDamage(nil, rActor, CombatManager.isCTHidden(node), draginfo.getDescription(), draginfo.getNumberData());
+						end
+					end
+
+					function update()
+						window.onHealthChanged();
+					end
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="nonlethal">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="hptemp" next="wounds" />
+				<script>
+					function handleDrop(draginfo)
+						if draginfo.getType() == "number" then
+							local node = window.getDatabaseNode();
+							local rActor = ActorManager.getActorFromCT(node);
+							ActionDamage.applyDamage(nil, rActor, CombatManager.isCTHidden(node), draginfo.getDescription() .. " [TYPE: nonlethal]", draginfo.getNumberData());
+						end
+					end
+
+					function update()
+						window.onHealthChanged();
+					end
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="hptemp">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<color>0000AA</color>
+				<hideonvalue value="0" />
+				<tabtarget prev="hp" next="nonlethal" />
+				<script>
+					function handleDrop(draginfo)
+						if draginfo.getNumberData() &gt; 0 then
+							setValue(draginfo.getNumberData());
+						else
+							setValue(getValue() + draginfo.getNumberData());
+						end
+					end
+
+					function update()
+						window.onHealthChanged();
+					end
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="hp">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<tabtarget prev="initresult" next="hptemp" />
+				<script>
+					function update()
+						window.onHealthChanged();
+					end
+				</script>
+			</number_ct_crosslink>
+			<number_ctentry_initresult name="initresult">
+				<anchored><right offset="-15" /></anchored>
+				<tabtarget next="hp" />
+			</number_ctentry_initresult>
+
+			<string_ctname name="name" />
+			<string_ctname_nonid name="nonid_name" />
+			
+			<!-- Targeting subsection -->
+			<icon_ctsection_targeting name="targetingicon" />
+			<sub_ctsection_targeting name="sub_targeting" />
+			<frame_ctsection_targeting name="frame_targeting" />
+
+			<!-- Offense subsection -->
+			<icon_ctsection name="activeicon">
+				<icon>button_sword_down</icon>
+			</icon_ctsection>
+
+			<number_ct_init name="init">
+				<anchored to="activeicon" position="righthigh" offset="50,4" />
+			</number_ct_init>
+			<label name="initlabel">
+				<anchored to="init" position="lefthigh" offset="10,0"/>
+				<static textres="init" />
+				<tooltip textres="ct_tooltip_init" />
+			</label>
+			<string_ct name="speed">
+				<anchored to="init" position="right" offset="50,0" width="90" />
+			</string_ct>
+			<label name="speedlabel">
+				<anchored to="speed" position="lefthigh" offset="5,0"/>
+				<static textres="ct_label_speed" />
+				<tooltip textres="ct_tooltip_speed" />
+			</label>
+			<string_ct name="actiondice">
+				<anchored to="speed" position="right" offset="45,0" width="90" />
+			</string_ct>
+			<label name="actiondicelabel">
+				<anchored to="actiondice" position="lefthigh" offset="5,0"/>
+				<static textres="ct_label_actiondice" />
+				<tooltip textres="ct_tooltip_actiondice" />
+			</label>
+			<string_ct name="crittable">
+				<anchored to="actiondice" position="right" offset="45,0" width="90" />
+			</string_ct>
+			<label name="crittablelabel">
+				<anchored to="crittable" position="lefthigh" offset="5,0"/>
+				<static textres="ct_label_crittable" />
+				<tooltip textres="ct_tooltip_crittable" />
+			</label>
+
+			<genericcontrol name="spacer_active">
+				<anchored height="0">
+					<top parent="active_spacer_top" anchor="bottom" relation="relative" offset="35" />
+					<left parent="activeicon" anchor="right" offset="55" />
+					<right offset="-17" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+				
+			<windowlist name="attacks">
+				<anchored>
+					<top parent="active_spacer_top" anchor="bottom" relation="relative" offset="0" />
+					<left parent="activeicon" anchor="right" offset="38" />
+					<right offset="-17" />
+				</anchored>
+				<datasource>.attacks</datasource>
+				<class>ct_attack</class>
+				<noscroll />
+				<script>
+					function addEntry()
+						local w = createWindow();
+						w.value.setFocus(true);
+					end
+				</script>
+			</windowlist>
+			<label name="attacks_label">
+				<anchored to="attacks" position="lefthigh" offset="5,0"/>
+				<static textres="ct_label_attack" />
+				<tooltip textres="ct_tooltip_attack" />
+			</label>
+
+			<frame_ctsub name="frame_active">
+				<anchored>
+					<top parent="activeicon" offset="-4" />
+					<bottom parent="attacks" offset="8" />
+				</anchored>
+			</frame_ctsub>
+			
+			<!-- Defense subsection -->
+			<icon_ctsection name="defensiveicon">
+				<icon>button_shield_down</icon>
+			</icon_ctsection>
+
+			<number_ct name="ac_final">
+				<anchored to="defensiveicon" position="righthigh" offset="45,4" />
+				<description textres="armorclass" />
+			</number_ct>
+			<label name="ac_final_label">
+				<anchored to="ac_final" position="lefthigh" offset="10,0"/>
+				<static textres="ac" />
+			</label>
+
+			<number_ct_save name="fortitudesave">
+				<anchored to="ac_final" position="righthigh" offset="50,0" />
+				<description textres="fortitude" />
+				<target>fortitude</target>
+			</number_ct_save>
+			<label name="fortitudelabel">
+				<anchored to="fortitudesave" position="lefthigh" offset="10,0"/>
+				<static textres="fort" />
+			</label>
+			<number_ct_save name="reflexsave">
+				<anchored to="fortitudesave" position="righthigh" offset="45,0" />
+				<description textres="reflex" />
+				<target>reflex</target>
+			</number_ct_save>
+			<label name="reflexlabel">
+				<anchored to="reflexsave" position="lefthigh" offset="10,0"/>
+				<static textres="ref" />
+			</label>
+			<number_ct_save name="willpowersave">
+				<anchored to="reflexsave" position="righthigh" offset="45,0" />
+				<description textres="will_long" />
+				<target>willpower</target>
+			</number_ct_save>
+			<label name="willpowerlabel">
+				<anchored to="willpowersave" position="lefthigh" offset="10,0"/>
+				<static textres="will" />
+			</label>
+
+			<string_ct name="specialqualities">
+				<anchored>
+					<top parent="active_spacer_top" anchor="bottom" relation="relative" offset="35" />
+					<left parent="defensiveicon" anchor="right" offset="61" />
+					<right offset="-17" />
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+			</string_ct>
+			<label name="specialqualitieslabel">
+				<anchored to="specialqualities" position="lefthigh" offset="5,0"/>
+				<static textres="ct_label_specialqualities" />
+				<tooltip textres="ct_tooltip_specialqualities" />
+			</label>
+
+			<frame_ctsub name="frame_defensive">
+				<anchored>
+					<top parent="defensiveicon" offset="-4" />
+					<bottom parent="specialqualities" offset="8" />
+				</anchored>
+			</frame_ctsub>
+
+			<!-- Space subsection -->
+			<icon_ctsection_spacing name="spacingicon" />
+			<number_ctentry_space name="space">
+				<anchored>
+					<top parent="active_spacer_top" anchor="bottom" relation="relative" offset="12" />
+				</anchored>
+				<default>5</default>
+			</number_ctentry_space>
+			<label_ctentry_space name="spacelabel" />
+			<number_ctentry_reach name="reach">
+				<default>5</default>
+			</number_ctentry_reach>
+			<label_ctentry_reach name="reachlabel" />
+			<genericcontrol name="spacer_space">
+				<anchored height="0">
+					<top parent="active_spacer_top" anchor="bottom" relation="relative" offset="5" />
+					<left parent="activeicon" anchor="right" offset="75" />
+					<right offset="-17" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<frame_ctsection_spacing name="frame_spacing">
+				<anchored>
+					<top parent="spacingicon" offset="-4"/>
+					<bottom parent="spacer_space" offset="8"/>
+				</anchored>
+			</frame_ctsection_spacing>
+
+			<!-- Effect subsection -->
+			<icon_ctsection_effect name="effecticon" />
+			<list_ctsection_effect name="effects" />
+			<button_ctsection_effect_iadd name="effects_iadd" />
+			<frame_ctsection_effect name="frame_effects">
+				<anchored>
+					<top parent="effecticon" offset="-4" />
+					<bottom parent="effects_iadd" />
+				</anchored>
+			</frame_ctsection_effect>
+
+			<!-- Quick labels -->
+			<string_ctentry_targets name="target_summary" />
+			<string_ctentry_effects name="effect_summary" />
+
+			<spacer_ctentry_middle name="spacer" />
+			<spacer_ctentry_active_bottom name="active_spacer_bottom" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ct_attack">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<string_textlistitem name="value">
+				<anchored>
+					<top />
+					<left />
+					<right />
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+				<nodeletelast />
+				<nohighlight />
+				<actortype>ct</actortype>
+				<actorpath>....</actorpath>
+				<delaykeyupdate merge="delete" />
+				<script file="common/scripts/string_attackline.lua" />
+			</string_textlistitem>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ct_effect" merge="join">
+		<sheetdata>
+			<button_ct_effect_apply name="apply" insertbefore="rightanchor" />
+		</sheetdata>
+	</windowclass>
+</root>
