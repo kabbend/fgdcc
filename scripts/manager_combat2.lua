@@ -52,7 +52,16 @@ function addNPC(sClass, nodeNPC, sName)
 	if sOptHRNH == "max" and sHD ~= "" then
 		nHP = StringManager.evalDiceString(sHD, true, true);
 	elseif sOptHRNH == "random" and sHD ~= "" then
-		nHP = math.max(StringManager.evalDiceString(sHD, true), 1);
+		--nHP = math.max(StringManager.evalDiceString(sHD, true), 1);
+		local aDice, nMod = StringManager.convertStringToDice(sHD);
+		local result = nMod;
+		for _,die in ipairs(aDice) do
+			local higher = tonumber( die:match("%d+") );
+			local lower = math.ceil(higher/2);
+			local r = math.random(lower, higher);
+			result = result + r;
+		end
+		nHP = result;
 	end
 	DB.setValue(nodeEntry, "hp", "number", nHP);
 
