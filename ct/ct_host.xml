@@ -322,34 +322,16 @@
 				<static textres="ct_label_speed" />
 				<tooltip textres="ct_tooltip_speed" />
 			</label>
-			<string_ct name="actiondice">
-				<anchored to="speed" position="right" offset="45,0" width="90" />
-				<script>
-					function onInit()
-						onValueChanged();
-					end
-
-					function onValueChanged()
-						local node = window.getDatabaseNode();
-						local sAD = DB.getValue( node, "actiondice", "" );
-						local sDice,_ = sAD:match( "(%d+)d(%d+)" ) ;
-						local nDice = 0;
-						if sDice then nDice = tonumber( sDice ); end
-						if nDice > 1 then
-							setColor("#00E21212");
-						else
-							setColor("#00000000");
-						end
-					end
-				</script>
-			</string_ct>
+			<state_ctatkcounter name="actiondicecounter">
+				<anchored to="speed" position="right" offset="30,0" width="100" />
+			</state_ctatkcounter>
 			<label name="actiondicelabel">
-				<anchored to="actiondice" position="lefthigh" offset="5,0"/>
+				<anchored to="actiondicecounter" position="lefthigh" offset="5,0"/>
 				<static textres="ct_label_actiondice" />
 				<tooltip textres="ct_tooltip_actiondice" />
 			</label>
 			<string_ct name="crittable">
-				<anchored to="actiondice" position="right" offset="45,0" width="90" />
+				<anchored to="actiondicecounter" position="right" offset="45,0" width="90" />
 				<script>
 				function action(draginfo)
                                         local rActor = ActorManager.getActor("npc", window.getDatabaseNode());

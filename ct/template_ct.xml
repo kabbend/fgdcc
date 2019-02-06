@@ -6,6 +6,15 @@
 -->
 
 <root>
+	<template name="state_ctatkcounter">
+                <buttongroup_counter>
+                        <sourcefields>
+                                <maximum>maxatk</maximum>
+                                <current>currentatk</current>
+                        </sourcefields>
+                </buttongroup_counter>
+        </template>
+
 	<template name="anchor_ctbox_client_header">
 		<genericcontrol name="headeranchor">
 			<anchored to="contentanchor" height="26">

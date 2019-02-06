@@ -65,6 +65,14 @@ function addNPC(sClass, nodeNPC, sName)
 	end
 	DB.setValue(nodeEntry, "hp", "number", nHP);
 
+	-- Set action dice counter
+	local sAD = DB.getValue(nodeNPC, "actiondice", "1d20");
+ 	local sDice,_ = sAD:match( "(%d+)d(%d+)" ) ;
+        local nDice = 1;
+        if sDice then nDice = tonumber( sDice ); end
+	DB.setValue(nodeEntry, "maxatk", "number", nDice);
+	DB.setValue(nodeEntry, "currentatk", "number", 0);
+
 	-- Defensive properties
 	local sAC = DB.getValue(nodeNPC, "ac", "10");
 	DB.setValue(nodeEntry, "ac_final", "number", tonumber(string.match(sAC, "^(%d+)")) or 10);

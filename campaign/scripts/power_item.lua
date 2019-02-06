@@ -16,11 +16,11 @@ function onInit()
 		registerMenuItem(Interface.getString("list_menu_deleteitem"), "delete", 6);
 		registerMenuItem(Interface.getString("list_menu_deleteconfirm"), "delete", 6, 7);
 
-		registerMenuItem(Interface.getString("power_menu_addaction"), "pointer", 3);
-		registerMenuItem(Interface.getString("power_menu_addcast"), "radial_sword", 3, 2);
-		registerMenuItem(Interface.getString("power_menu_adddamage"), "radial_damage", 3, 3);
-		registerMenuItem(Interface.getString("power_menu_addheal"), "radial_heal", 3, 4);
-		registerMenuItem(Interface.getString("power_menu_addeffect"), "radial_effect", 3, 5);
+		--registerMenuItem(Interface.getString("power_menu_addaction"), "pointer", 3);
+		--registerMenuItem(Interface.getString("power_menu_addcast"), "radial_sword", 3, 2);
+		--registerMenuItem(Interface.getString("power_menu_adddamage"), "radial_damage", 3, 3);
+		--registerMenuItem(Interface.getString("power_menu_addheal"), "radial_heal", 3, 4);
+		--registerMenuItem(Interface.getString("power_menu_addeffect"), "radial_effect", 3, 5);
 	end
 	
 	onDisplayChanged();

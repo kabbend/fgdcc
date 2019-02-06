@@ -217,7 +217,7 @@ function setActiveVisible()
 	initlabel.setVisible(v);
 	speed.setVisible(v);
 	speedlabel.setVisible(v);
-	actiondice.setVisible(v);
+	actiondicecounter.setVisible(v);
 	actiondicelabel.setVisible(v);
 	crittable.setVisible(v);
 	crittablelabel.setVisible(v);
