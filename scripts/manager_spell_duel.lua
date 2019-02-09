@@ -40,8 +40,48 @@ local phlo = {
 	"Mutual corruption. Both spells fail, and both casters suffer 1d4+1 corruption results. Roll corruption as normal for the spells involved."
 	};
 
+local coT = {
+	["m"] = {
+		"Character develops horrid pustules on his face. These pustules do not heal and impose a -1 penalty to Personality.",
+		"Character skin on one random portion of his body appears to melt. Like wax, it flows and reforms into odd puddles and shapes. This is an ongoing, constant motion that itches constantly and repulses others. Determine location randomly (1d6): (1) face; (2) arms; (3) legs; (4) torso; (5) hands; (6) feet.",
+		"One of the character legs grows 1d6 foot. Character now walks with an odd gait.",
+		"Eyes affected. Roll 1d4: (1) eyes glow with unearthly color; (2) eyes gain light sensitivity (-1 to all rolls in daylight); (3) character gains infravision (sees heat signatures at range of 100 ); (4) eyes become large and unblinking, like a fish.",
+		"Character develops painful lesions on his chest and legs and open sores on his hands and feet that do not heal.",
+		"Ears mutate. Roll 1d5: (1) ears become pointed; (2) ears fall off (character still hears normally); (3) ears enlarge and look like an elephant; (4) ears elongate and look like a donkey (character also gains braying laugh); (5) ears shrivel and fold back.",
+		"Chills. Character shakes constantly and cannot remain quiet due to chattering teeth.",
+		"Character facial appearance is permanently disfigured according to the magic that was summoned. If fire magic was used, his eyebrows are scorched and his skin glows red; if cold magic was used, his skin is pasty white and his lips are blue. If ambiguous magic was used, his appearance grows gaunt and he permanently loses 5 pounds.",
+		"Character hair is suffused with dark energy. Roll 1d4: (1) hair turns bone white; (2) hair turns pitch black; (3) hair falls out completely; (4) hair sticks straight up.",
+		"Character passes out. He is unconscious for 1d6 hours or until awakened by vigorous means."
+		},
+	["M"] = {
+		"Febrile. Character slowly weakens over 1d4 months, suffering a -1 penalty to Strength for each month.",
+		"A duplicate of the character face grows on his back. It looks just like his normal face. The eyes, nose, and mouth can be operated independently",
+		"Consumption. Character body feeds on its own mass. Character loses 2d10 pounds in one month and suffers a -1 penalty to Stamina.",
+		"Corpulence. Character gains 6d12 pounds in one month. The weight gain imposes a -1 penalty to Agility, and the character speed is reduced by 5 .",
+		"Character crackles with energy of a type associated with the spells he most commonly casts. The energy could manifest as flames, lightning, cold waves, etc",
+		"Character height changes by 1d20-10 inches. There is no change in weight; the character body grows thin and tall or short and fat.",
+		"Demonic taint. Roll 1d3: (1) character fingers elongate into claws, and he gains an attack for 1d6 damage; (2) character feet transform into cloven hoofs; (3) character legs become goat-like.",
+		"Character skin changes to an unearthly shade. Roll 1d8: (1) albino; (2) pitch black; (3) clear; (4) shimmering quality; (5) deep blue; (6) malevolent yellow; (7) ashen and pallid; (8) texture and color of fishy scales; (9) thick bear-like fur; (10) reptilian scales.",
+		"Small horns grow on the character forehead. This appears as a ridge-like, simian forehead for the first month; then buds for the second month; goat horns after the third month; and finally, bull horns after six months.",
+		"Character tongue forks and his nostrils narrow to slits. The character is able to smell with his tongue like a snake."
+		},
+	["G"] = {
+		"A sliver of soul energy is claimed by a demon lord. Character experiences unearthly pain, suffering 3d6 damage, a permanent -2 penalty to all ability scores, and an additional -2 penalty to Luck.",
+		"Decay. Character flesh falls off in zombie-like chunks. Character loses 1d4 hp per day. Only magical healing can stave off the decay.",
+		"Character head becomes bestial in a painful overnight transformation. Roll 1d6: (1) snake; (2) goat; (3) bull; (4) rat; (5) insect; (6) fish.",
+		"Character limbs are replaced by suckered tentacles. One limb is replaced at random each month for four months. At the end of four months, it is impossible to hide the character inhuman nature.",
+		"Small tentacles grow around the character mouth and ears. The tentacles are maggot-sized at first, but grow at rate of 1” per month to a mature length of 12”.",
+		"Third eye. Roll 1d4 for location: (1) middle of forehead; (2) palm of hand; (3) chest; (4) back of head.",
+		"Fingers on one hand fuse while the thumb enlarges. After one week, the hand has transformed into a crab claw. Character gains a natural attack for 1d6 damage and can no longer grasp normal weapons and objects.",
+		"Character grows a tail over 1d7 days. Roll 1d6: (1) scorpion tail that can attack for 1d4 damage plus poison (DC 10 Fort save or target loses 1d4 Str permanently); (2) scaly snake tail; (3) forked demon tail (grants +1 Agility); (4) fleshy tail ending in a useable third hand; (5) fused cartilaginous links ending in spiked stump that can attack for 1d6 damage; (6) bushy horse s tail.",
+		"Bodily transformation. Roll 1d6: (1) character grows scales across his entire body; (2) character grows gills; (3) character prouts feathers; (4) character develops webbed toes and feet.",
+		"Character grows a beak in place of his mouth. Transformation starts as a puckering of the lips that slowly turns into a fullfledged bird or squid beak over the next 1d12 months. Character gains a bite attack for 1d3 damage."
+		}
+	};
+
 function onInit()
 	Comm.registerSlashHandler("sd", slashCommandHandlerSpellDuel);
+	Comm.registerSlashHandler("co", slashCommandHandlerCorruption);
 end
 
 function mysplit(inputstr, sep)
@@ -53,12 +93,75 @@ function mysplit(inputstr, sep)
                                 return t
                         end
 
+function slashCommandHandlerCorruption(sCommand, sParams)
+
+	-- parse params
+	local args = mysplit( sParams );
+
+	local aUsageMessage = { text = "/co [mMG] spellLevel (roll d10+luck) / m=minor,M=Major,G or g=Greater" , secret = true };
+
+	-- we expect arg1 = a letter, arg 2 = spell level, and eventually a roll number 
+	if (not args) or (#args ~= 2 and #args ~= 3) then 
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+
+	-- get table
+	local sCoTable = args[1];
+	if sCoTable ~= "m" and sCoTable ~= "M" and sCoTable ~= "G" and sCoTable ~= "g" then
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+	if sCoTable == "g" then sCoTable = "G"; end
+
+	-- get spell level
+	local nSpellLevel = tonumber( args[2] );
+	if not nSpellLevel then
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+
+	-- get roll eventually
+	local nRoll = 0;
+	if #args == 3 then
+		nRoll = tonumber(args[3]);
+		if not nRoll then
+			Comm.addChatMessage(aUsageMessage) ; 
+			return;
+		end
+	end
+
+	local nInitialRoll;
+
+	-- roll die if not given
+	if nRoll == 0 then
+		nInitialRoll = math.random(10);
+		nRoll = nInitialRoll - nSpellLevel;
+	else
+		nInitialRoll = nRoll;
+		nRoll = nRoll - nSpellLevel;
+	end
+
+	-- adjust value if needed
+	if nRoll < 1 then 
+		nRoll = 1;
+	elseif nRoll > 10 then
+		nRoll = 10;
+	end
+
+	local sText = coT[sCoTable][nRoll]; 
+	local aMessage = { text = " => [corruption " .. sCoTable .. " on spell level " .. nSpellLevel .. ", roll " .. nInitialRoll .. ", result=" .. nRoll .. "] " .. sText , secret = true };
+	Comm.addChatMessage(aMessage) ; 
+	return;
+
+end
+
 function slashCommandHandlerSpellDuel(sCommand, sParams)
 
 	-- parse params
 	local args = mysplit( sParams );
 
-	local aUsageMessage = { text = "/sd attackerCheck defenderCheck (both >= 12)" , secret = true };
+	local aUsageMessage = { text = "/sd attackerCheck defenderCheck (>= 12)" , secret = true };
 
 	-- we expect arg1 = attacker roll, arg 2 = defender roll, and both values are numeric and >= 12
 	if (not args) or #args ~= 2 or args[1] == "" or args[2] == "" then 
@@ -126,7 +229,7 @@ function slashCommandHandlerSpellDuel(sCommand, sParams)
 	if nRoll > 10 then nRoll = 10; end
 	
 	local sText = counterspell[countercolumn][nRoll]; 
-	local aMessage = { text = " => [" .. countercolumn .. ", die d" .. die .. ", roll " .. nRoll .. " ] " .. sText , secret = true };
+	local aMessage = { text = " => [" .. countercolumn .. ", die d" .. die .. ", roll " .. nRoll .. "] " .. sText , secret = true };
 	Comm.addChatMessage(aMessage) ; 
 
 end
