@@ -1,4 +1,7 @@
 
+--
+-- Counterspell table
+--
 
 local counterspell = {
 	["defenderhigh"] = {
@@ -27,6 +30,10 @@ local counterspell = {
 		}
 };
 
+--
+-- Phlogiston disturbance table
+--
+
 local phlo = {
 	"Pocket dimension. Both casters are instantaneously transferred to a pocket dimension that is spontaneously created by the interaction between their spells. They remain within the pocket dimension until one is killed, at which point the interaction of their spells ceases and the survivor is transferred back to the material plane one millisecond after his departure. Observers see only a brief flicker and the disappearance of the loser, whose body is lost forever. The pocket dimension appears as (roll 1d6) (1) a mountaintop surrounded by red clouds, (2) a bubble adrift in space, (3) a sweltering island in a sea of lava, (4) an upside- down forest where the trees grow down from the sky above, (5) a dust mote atop the point of a needle, (6) the left nostril of an intergalactic whale.",
 	"Alignment rift. Both casters are transferred to an alignment plane. If both are the same alignment, they go to that plane; if they are opposed, or if either is neutral, they transfer to the plane of neutrality. They return to the material plane after (roll 1d4) (1) one caster is killed (both bodies return), (2) 1d8 days, (3) 3d6 rounds for each caster, rolled separately, (4) The End of Days.",
@@ -39,6 +46,10 @@ local phlo = {
 	"Demonic invasion. 1d4 randomly determined demons are summoned at the exact midpoint between the two casters. Determine their reaction randomly as with result 8 above. The demons are of a type as determined here: (roll 1d4) (1) type I, (2) type II, (3) type III, (4) type IV.",
 	"Mutual corruption. Both spells fail, and both casters suffer 1d4+1 corruption results. Roll corruption as normal for the spells involved."
 	};
+
+--
+-- Corruption tables
+--
 
 local coT = {
 	["m"] = {
@@ -79,9 +90,40 @@ local coT = {
 		}
 	};
 
+--
+-- Disapproval table
+--
+
+local disT = {
+	"The cleric must atone for his sins. He must do nothing but utter chants and intonations for the next 10 minutes, starting as soon as he is able (i.e., if he is in combat, he can wait until the danger is over).",
+	"The cleric must pray for forgiveness immediately. He must spend at least one hour in prayer, beginning as soon as he is able (i.e., if he is in combat, he can wait until the danger is over). Failure to finish the full hour of prayers within the next 120 minutes is looked upon unfavorably; he incurs a -1 penalty to all spell checks until he completes the full hour.",
+	"The cleric must increase his god power by recruiting a new follower. If he does not convert one new follower to his deity worship by the next sunrise, he takes a -1 penalty to all checks on the following day. This penalty resets after 24 hours",
+	"The cleric immediately incurs an additional -1 penalty to all spell checks that lasts until the next day.",
+	"The cleric must undergo the test of humility. For the remainder of the day, he must defer to all other characters and creatures as if they were his superiors. Failure (at the discretion of the judge) means he immediately loses all spellcasting ability (including healing and laying on hands) for the remainder of the day.",
+	"The cleric incurs an immediate -1 penalty to all attempts to lay on hands until he goes on a quest to heal the crippled. This quest is of his own design, but generally speaking must result in significant aid to the crippled, blind, lamed, sickly, etc. Once the quest is completed, the deity revokes the penalty. While the penalty remains, it applies to all attempts to lay on hands, even if the 'normal' disapproval range has been reduced back to a natural 1.",
+	"The cleric must endure a test of faith. He gains an illness that costs him 1 point each of Strength, Agility, and Stamina. The ability score loss heals at the normal rate of 1 point per day. The cleric may not use magic to heal the loss. If the cleric endures the test to the satisfaction of the deity, he retains his magical abilities. If not (judge discretion), his disapproval range immediately increases by another point.",
+	"The cleric immediately incurs a -4 penalty to spell checks on the specific spell that resulted in disapproval (including laying on hands and turning unholy, if those were the acts that produced disapproval). This lasts until the next day.",
+	"The cleric immediately incurs an additional -2 penalty to all spell checks that lasts until the next day.",
+	"The cleric loses access to one randomly determined level 1 spell. This spell cannot be cast until the next day.",
+	"The cleric is ordered by his deity to meditate on his faith and come to a better understanding of what he has done to earn disapproval. The cleric incurs an immediate and permanent -2 penalty to all spell checks. The only way to lift this penalty is for the cleric to meditate. For every full day of meditation, the cleric can make a DC 15 Will save. Success means the spell check penalties are removed.",
+	"The cleric is temporarily disowned by his deity. For the rest of the day, the character cannot accumulate XP and may not gain class levels as a cleric. After the time period expires, the character begins to accumulate XP again as normal but does not accrue 'back pay' (so to speak) for XP missed while he was disowned.",
+	"The cleric loses access to two randomly determined level 1 spells. These spells cannot be cast until the next day.",
+	"The cleric deity wishes to test whether the cleric is a man of the faith or a man of the flesh. Calculate the cleric total net worth in gold pieces. The cleric immediately incurs a permanent -4 penalty to all spell checks. The only way to remove this penalty is for the cleric to sacrifice his material possessions. For every 10 percent of his net worth sacrificed to the deity, one point of penalty is removed. Or, in other words, sacrificing 40 percent of what he owns will return the cleric to a normal spell check penalty. A sacrifice can be destruction, consecration, donation, transformation into a temple or statue, etc.",
+	"The deity is not forgiving on this day. When the cleric rests for the night, he does not 'reset' his disapproval range at the next morning – it carries over from this day to the next. The disapproval ranged resets as normal on the following day.",
+	"Cleric is temporarily barred from using his lay on hands ability. The deity will not grant healing powers for the next 1d4 days. After that time, the cleric regains the use of his healing abilities.",
+	"The cleric loses access to 1d4+1 spells, randomly determined from all the character knows. These spells cannot be cast for the next 24 hours.",
+	"Cleric is temporarily unable to turn unholy creatures. The cleric regains the ability after 1d4 days.",
+	"The cleric is stained with the mark of the unfaithful. This physical mark appears like a brand, tattoo, or birthmark, with the symbol determined by the cleric faith. The symbol is automatically visible to all worshippers of the cleric faith, even through clothing, but may be invisible to others. To all who see and comment on the mark, the cleric must explain his sin and describe what he is doing as penance. If he continues to sustain his faith for a week while retaining the mark, it disappears.",
+	"The cleric ability to lay on hands is restricted. The ability works only once per day per creature healed – no single character can be healed more than once per day. After 24 hours, the ability use reverts to normal."
+	};
+
+
 function onInit()
 	Comm.registerSlashHandler("sd", slashCommandHandlerSpellDuel);
 	Comm.registerSlashHandler("co", slashCommandHandlerCorruption);
+	Comm.registerSlashHandler("dis", slashCommandHandlerDisapproval);
+	Comm.registerSlashHandler("?", slashCommandHandlerHelp);
+	Comm.registerSlashHandler("help", slashCommandHandlerHelp);
 end
 
 function mysplit(inputstr, sep)
@@ -92,6 +134,53 @@ function mysplit(inputstr, sep)
                                 end
                                 return t
                         end
+
+function slashCommandHandlerHelp(sCommand, sParams)
+
+	local aUsageMessage = { text = "/dis check\n\nroll on disapproval table. Check is N x d4 - luck mod.\n" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
+
+	aUsageMessage = { text = "/co mMgG spellLevel [check]\n\nroll on corruption tables. The letter gives the table, (m)inor, (M)ajor or (gG)reater. The spell level must be given, the roll check is optional. If roll given, should not take spell level into account, just the bare die Roll, ie. 1d10 + luck mod.\n" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
+
+	local aUsageMessage = { text = "/sd attackerCheck defenderCheck\n\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Given the checks, the command determines appropriate die then roll it automatically. In case of equals checks, roll directly on Phlogiston table.\n" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
+
+end
+
+
+function slashCommandHandlerDisapproval(sCommand, sParams)
+
+	-- parse params
+	local args = mysplit( sParams );
+
+	local aUsageMessage = { text = "/dis check (check = Nd4 - luck)" , secret = true };
+
+	-- we expect arg1 = a roll number 
+	if (not args) or (#args ~= 1) then 
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+
+	-- get roll value
+	local nRoll = tonumber( args[1] );
+	if not nRoll then
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+		
+	-- adjust roll if needed
+	if nRoll < 1 then 
+		nRoll = 1;
+	elseif nRoll > 20 then
+		nRoll = 20;
+	end
+
+	local sText = disT[nRoll]; 
+	local aMessage = { text = " => [disapproval , roll " .. nRoll .. "] " .. sText , secret = true };
+	Comm.addChatMessage(aMessage) ; 
+
+end
 
 function slashCommandHandlerCorruption(sCommand, sParams)
 
@@ -152,7 +241,6 @@ function slashCommandHandlerCorruption(sCommand, sParams)
 	local sText = coT[sCoTable][nRoll]; 
 	local aMessage = { text = " => [corruption " .. sCoTable .. " on spell level " .. nSpellLevel .. ", roll " .. nInitialRoll .. ", result=" .. nRoll .. "] " .. sText , secret = true };
 	Comm.addChatMessage(aMessage) ; 
-	return;
 
 end
 
