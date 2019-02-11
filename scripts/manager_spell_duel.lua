@@ -124,6 +124,7 @@ function onInit()
 	Comm.registerSlashHandler("dis", slashCommandHandlerDisapproval);
 	Comm.registerSlashHandler("?", slashCommandHandlerHelp);
 	Comm.registerSlashHandler("help", slashCommandHandlerHelp);
+	Comm.registerSlashHandler("spell", slashCommandHandlerSpell);
 end
 
 function mysplit(inputstr, sep)
@@ -135,7 +136,80 @@ function mysplit(inputstr, sep)
                                 return t
                         end
 
+function slashCommandHandlerSpell(sCommand, sParams)
+
+	-- parse params
+	local args = mysplit( sParams );
+
+	local aUsageMessage = { text = "/spell spellname" , secret = true };
+
+	-- we expect arg1 = spell name 
+	if (not args) or (#args ~= 1) then 
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+
+	-- try to find it
+	local child = DB.getChildrenGlobal(  "reference.spelldata@DCC RPG Spells" );
+	for _,spell in ipairs(child) do
+		local name = spell.getName();
+		if name == args[1] then
+			-- found ! open window
+			local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. args[1] .. "@DCC RPG Spells" );
+			return;
+		end	
+	end
+
+	-- if here, not found...
+
+	local aMessage = {};
+
+	-- display similar names, starting with the given argument
+	local similar = {};
+	local size = string.len(args[1]);
+	for _,spell in ipairs(child) do
+		local name = spell.getName();
+		local first = string.sub(name, 1, size);
+		if first == args[1] then	
+			table.insert( similar , name );
+		end
+	end
+		
+	if #similar == 1 then
+		-- found one similar. Open it.
+		aMessage = { text = "Did you mean '" .. similar[1] .. "' ?", secret = true };
+		Comm.addChatMessage(aMessage) ; 
+		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. similar[1] .. "@DCC RPG Spells" );
+		return;
+
+	elseif #similar > 1 then
+		-- too many. display them all.
+		aMessage = { text = "Spell not found. Did you mean :" , secret = true };
+		for _,n in ipairs(similar) do
+			aMessage.text = aMessage.text .. "\n" .. n;
+		end
+		Comm.addChatMessage(aMessage) ; 
+		return;
+	end
+
+	-- if no similar name, display all spells starting with same letter
+	aMessage = { text = "Spell not found. Did you mean :" , secret = true };
+	local letter = string.sub(args[1], 1, 1);
+	for _,spell in ipairs(child) do
+		local name = spell.getName();
+		local first = string.sub(name, 1, 1);
+		if first == letter then	
+			aMessage.text = aMessage.text .. "\n" .. name;	
+		end
+	end
+	Comm.addChatMessage(aMessage) ; 
+	
+end
+
 function slashCommandHandlerHelp(sCommand, sParams)
+
+	local aUsageMessage = { text = "/spell spellname\n\nopen a particular spell table\n" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
 
 	local aUsageMessage = { text = "/dis check\n\nroll on disapproval table. Check is N x d4 - luck mod.\n" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
