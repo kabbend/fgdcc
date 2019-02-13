@@ -169,24 +169,26 @@ function slashCommandHandlerSpell(sCommand, sParams)
 	local size = string.len(args[1]);
 	for _,spell in ipairs(child) do
 		local name = spell.getName();
+		local lvl = DB.getValue( spell , "level" , 0 );
+		local domain = DB.getValue( spell , "source" , "" );
 		local first = string.sub(name, 1, size);
 		if first == args[1] then	
-			table.insert( similar , name );
+			table.insert( similar , { name = name, domain = domain, level = lvl } );
 		end
 	end
 		
 	if #similar == 1 then
 		-- found one similar. Open it.
-		aMessage = { text = "Did you mean '" .. similar[1] .. "' ?", secret = true };
+		aMessage = { text = "Did you mean '" .. similar[1].name .. "' ?", secret = true };
 		Comm.addChatMessage(aMessage) ; 
-		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. similar[1] .. "@DCC RPG Spells" );
+		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. similar[1].name .. "@DCC RPG Spells" );
 		return;
 
 	elseif #similar > 1 then
 		-- too many. display them all.
 		aMessage = { text = "Spell not found. Did you mean :" , secret = true };
 		for _,n in ipairs(similar) do
-			aMessage.text = aMessage.text .. "\n" .. n;
+			aMessage.text = aMessage.text .. "\n" .. n.name .. "  (" .. n.domain .. " , " .. n.level .. ")";
 		end
 		Comm.addChatMessage(aMessage) ; 
 		return;
@@ -197,9 +199,11 @@ function slashCommandHandlerSpell(sCommand, sParams)
 	local letter = string.sub(args[1], 1, 1);
 	for _,spell in ipairs(child) do
 		local name = spell.getName();
+		local lvl = DB.getValue( spell , "level" , 0 );
+		local domain = DB.getValue( spell , "source" , "" );
 		local first = string.sub(name, 1, 1);
 		if first == letter then	
-			aMessage.text = aMessage.text .. "\n" .. name;	
+			aMessage.text = aMessage.text .. "\n" .. name .. "  (" .. domain .. " , " .. lvl .. ")";	
 		end
 	end
 	Comm.addChatMessage(aMessage) ; 
