@@ -125,6 +125,8 @@ function onInit()
 	Comm.registerSlashHandler("?", slashCommandHandlerHelp);
 	Comm.registerSlashHandler("help", slashCommandHandlerHelp);
 	Comm.registerSlashHandler("spell", slashCommandHandlerSpell);
+	Comm.registerSlashHandler("wiz", slashCommandHandlerMagicUser);
+	Comm.registerSlashHandler("cle", slashCommandHandlerMagicUser);
 end
 
 function mysplit(inputstr, sep)
@@ -135,6 +137,65 @@ function mysplit(inputstr, sep)
                                 end
                                 return t
                         end
+
+function slashCommandHandlerMagicUser(sCommand, sParams)
+
+	-- parse params
+	local args = mysplit( sParams );
+	local source;
+	if sCommand == "wiz" then
+		source = "Wizard";
+	else
+		source = "Cleric";
+	end
+
+	local aUsageMessage = { text = sCommand .. " maxlevel" , secret = true };
+
+	-- we expect arg1 =  Hit Dice
+	if (not args) or (#args ~= 1) then 
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+	local maxlevel = tonumber( args[1] );
+	if not maxlevel or maxlevel == 0 then
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+
+	-- create an array of array ( = an array for each level ) where we will store existing spells
+	local eligible = {};
+	for i=1,maxlevel do
+		eligible[i] = {};
+	end
+	
+	local child = DB.getChildrenGlobal(  "reference.spelldata@DCC RPG Spells" );
+	for _,spell in ipairs(child) do
+		local name = spell.getName();
+		local lvl = DB.getValue( spell , "level" , 0 );
+		local domain = DB.getValue( spell , "source" , "" );
+		local general = DB.getValue( spell , "general" , "" );
+		if (general ~= "") and (domain == source ) and ( lvl > 0 ) and ( lvl <= maxlevel ) then 
+			table.insert( eligible[lvl] , name );
+		end
+	end
+
+	-- then randomly select one spell per level
+	aMessage = { text = "Selected spells :" , secret = true };
+	local offset = 0;
+	for i=1,maxlevel do
+		if #eligible[i] > 0 then
+		  local r = math.random( #eligible[i] );
+		  aMessage.text = aMessage.text .. "\nlevel " .. i .. "  " .. eligible[i][r] .. "  (" .. source .. ")";
+		  local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. eligible[i][r] .. "@DCC RPG Spells" );
+		  w.setSize( 800 , 600 );
+		  w.setPosition( 380 + offset , 100 + offset );
+		  offset = offset + 30;
+		end
+	end
+	Comm.addChatMessage(aMessage) ; 
+	
+
+end
 
 function slashCommandHandlerSpell(sCommand, sParams)
 
@@ -156,6 +217,8 @@ function slashCommandHandlerSpell(sCommand, sParams)
 		if name == args[1] then
 			-- found ! open window
 			local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. args[1] .. "@DCC RPG Spells" );
+			w.setSize( 800 , 600 );
+			w.setPosition( 380 , 100 );
 			return;
 		end	
 	end
@@ -171,24 +234,29 @@ function slashCommandHandlerSpell(sCommand, sParams)
 		local name = spell.getName();
 		local lvl = DB.getValue( spell , "level" , 0 );
 		local domain = DB.getValue( spell , "source" , "" );
+		local general = DB.getValue( spell , "general" , "" );
+		local filled = "  ";
+		if (general ~= "") then filled = "* "; end
 		local first = string.sub(name, 1, size);
 		if first == args[1] then	
-			table.insert( similar , { name = name, domain = domain, level = lvl } );
+			table.insert( similar , { name = name, domain = domain, level = lvl , filled = filled } );
 		end
 	end
 		
 	if #similar == 1 then
 		-- found one similar. Open it.
-		aMessage = { text = "Did you mean '" .. similar[1].name .. "' ?", secret = true };
+		aMessage = { text = "It seems to be '" .. similar[1].name .. "' ? Opening it.", secret = true };
 		Comm.addChatMessage(aMessage) ; 
 		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. similar[1].name .. "@DCC RPG Spells" );
+		w.setSize( 800 , 600 );
+		w.setPosition( 380 , 100 );
 		return;
 
 	elseif #similar > 1 then
 		-- too many. display them all.
 		aMessage = { text = "Spell not found. Did you mean :" , secret = true };
 		for _,n in ipairs(similar) do
-			aMessage.text = aMessage.text .. "\n" .. n.name .. "  (" .. n.domain .. " , " .. n.level .. ")";
+			aMessage.text = aMessage.text .. "\n" .. n.filled .. n.name .. "  (" .. n.domain .. " , " .. n.level .. ")";
 		end
 		Comm.addChatMessage(aMessage) ; 
 		return;
@@ -201,9 +269,12 @@ function slashCommandHandlerSpell(sCommand, sParams)
 		local name = spell.getName();
 		local lvl = DB.getValue( spell , "level" , 0 );
 		local domain = DB.getValue( spell , "source" , "" );
+		local general = DB.getValue( spell , "general" , "" );
+		local filled = "  ";
+		if (general ~= "") then filled = "* "; end
 		local first = string.sub(name, 1, 1);
 		if first == letter then	
-			aMessage.text = aMessage.text .. "\n" .. name .. "  (" .. domain .. " , " .. lvl .. ")";	
+			aMessage.text = aMessage.text .. "\n" .. filled .. name .. "  (" .. domain .. " , " .. lvl .. ")";	
 		end
 	end
 	Comm.addChatMessage(aMessage) ; 
@@ -222,6 +293,12 @@ function slashCommandHandlerHelp(sCommand, sParams)
 	Comm.addChatMessage(aUsageMessage) ; 
 
 	local aUsageMessage = { text = "/sd attackerCheck defenderCheck\n\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Given the checks, the command determines appropriate die then roll it automatically. In case of equals checks, roll directly on Phlogiston table.\n" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
+
+	local aUsageMessage = { text = "/wiz maxlevel\n\nrandomly choose a spell per level for an NPC, defined by maxlevel value" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
+
+	local aUsageMessage = { text = "/cle maxlevel\n\nrandomly choose a spell per level for an NPC, defined by maxlevel value" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
 end
