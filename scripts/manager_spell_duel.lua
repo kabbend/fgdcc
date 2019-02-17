@@ -117,11 +117,27 @@ local disT = {
 	"The cleric ability to lay on hands is restricted. The ability works only once per day per creature healed – no single character can be healed more than once per day. After 24 hours, the ability use reverts to normal."
 	};
 
+--
+-- Generic misfire 
+--
+
+local misT = {
+	"Nearest ally is partially transformed into an animal (Will save to resist; DC = 10 + (2x spell level)). Roll 1d6 to determine body part: 1 = arms; 2 = legs; 3 = skin; 4 = head; 5-6 = body. Roll 1d8 for animal type: 1 = chicken; 2 = gorilla; 3 = cow; 4 = lizard; 5 = snake; 6 = horse; 7 = dragon; 8 = eagle. The duration of this effect is 1d7 days. On a roll of 7, re-roll as 1d7 weeks. On a second 7, re-roll as 1d7 months.",
+	"Different spell effect! The wizard inadvertently channels the wrong spell energies. Randomly determine a different spell of the same level. Have the wizard make a spell check roll for that spell. If the spell check is a failure, nothing happens. If it is a success, follow the results.",
+	"Rain! But it’s not water. The wizard inadvertently causes a torrential downpour of (roll 1d6): 1 =  ower pet- als; 2 = garden snails; 3 = cow dung; 4 = rotten vegetables; 5 = iron ingots; 6 = snakes (5% chance they are poisonous).",
+	"Explosion centered on nearest creature! That creature takes 1d3 damage per spell level.",
+	"Transformation! One randomly determined creature among the six closest is transformed into (roll 1d6): 1 = stone; 2 = crystal; 3 = earth; 4 = iron; 5 = water; 6 = fire. (Will save to resist, DC = 10 + (2x spell level)). There is a 10% chance the transformation is permanent; otherwise, the creature returns to normal in 1d7 days.",
+	"Inadvertent corruption! Roll d12+5 on the minor corruption table and apply the result to one randomly de- termined creature among the six closest (no Will save to resist).",
+	"Fireworks! Brilliant colored lights explode all around the caster, creating thundering booms. This effect deals no damage but draws attention to the caster.",
+	"Cloud of ash! Everyone within 20’ of the caster is coated in fine ash."
+	};
+
 
 function onInit()
 	Comm.registerSlashHandler("sd", slashCommandHandlerSpellDuel);
 	Comm.registerSlashHandler("co", slashCommandHandlerCorruption);
 	Comm.registerSlashHandler("dis", slashCommandHandlerDisapproval);
+	Comm.registerSlashHandler("mis", slashCommandHandlerMisfire);
 	Comm.registerSlashHandler("?", slashCommandHandlerHelp);
 	Comm.registerSlashHandler("help", slashCommandHandlerHelp);
 	Comm.registerSlashHandler("spell", slashCommandHandlerSpell);
@@ -283,26 +299,61 @@ end
 
 function slashCommandHandlerHelp(sCommand, sParams)
 
-	local aUsageMessage = { text = "/spell spellname\n\nopen a particular spell table\n" , secret = true };
+	local aUsageMessage = { text = "/spell spellname\nopen a particular spell table\n" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
-	local aUsageMessage = { text = "/dis check\n\nroll on disapproval table. Check is N x d4 - luck mod.\n" , secret = true };
+	local aUsageMessage = { text = "/dis check\nroll on disapproval table. Check is N x d4 - luck mod.\n" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
-	aUsageMessage = { text = "/co mMgG spellLevel [check]\n\nroll on corruption tables. The letter gives the table, (m)inor, (M)ajor or (gG)reater. The spell level must be given, the roll check is optional. If roll given, should not take spell level into account, just the bare die Roll, ie. 1d10 + luck mod.\n" , secret = true };
+	local aUsageMessage = { text = "/mis check\nroll on generic misfire table. Check is 1d8.\n" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
-	local aUsageMessage = { text = "/sd attackerCheck defenderCheck\n\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Given the checks, the command determines appropriate die then roll it automatically. In case of equals checks, roll directly on Phlogiston table.\n" , secret = true };
+	aUsageMessage = { text = "/co mMgG spellLevel [check]\nroll on corruption tables. The letter gives the table, (m)inor, (M)ajor or (gG)reater. The spell level must be given, the roll check is optional. If roll given, should not take spell level into account, just the bare die Roll, ie. 1d10 + luck mod.\n" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
-	local aUsageMessage = { text = "/wiz maxlevel\n\nrandomly choose a spell per level for an NPC, defined by maxlevel value" , secret = true };
+	local aUsageMessage = { text = "/sd attackerCheck defenderCheck\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Given the checks, the command determines appropriate die then roll it automatically. In case of equals checks, roll directly on Phlogiston table.\n" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
-	local aUsageMessage = { text = "/cle maxlevel\n\nrandomly choose a spell per level for an NPC, defined by maxlevel value" , secret = true };
+	local aUsageMessage = { text = "/wiz maxlevel\n/cle maxlevel\nrandomly choose a spell per level for an NPC, defined by maxlevel value (1-5)" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 
+	local aUsageMessage = { text = "/loot [low|med|high]\ndetermines random loot" , secret = true };
+	Comm.addChatMessage(aUsageMessage) ; 
 end
 
+
+function slashCommandHandlerMisfire(sCommand, sParams)
+
+	-- parse params
+	local args = mysplit( sParams );
+
+	local aUsageMessage = { text = "/mis check (check = 1d8)" , secret = true };
+
+	-- we expect arg1 = a roll number 
+	if (not args) or (#args ~= 1) then 
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+
+	-- get roll value
+	local nRoll = tonumber( args[1] );
+	if not nRoll then
+		Comm.addChatMessage(aUsageMessage) ; 
+		return;
+	end
+		
+	-- adjust roll if needed
+	if nRoll < 1 then 
+		nRoll = 1;
+	elseif nRoll > 8 then
+		nRoll = 8;
+	end
+
+	local sText = misT[nRoll]; 
+	local aMessage = { text = " => [misfire , roll " .. nRoll .. "] " .. sText , secret = true };
+	Comm.addChatMessage(aMessage) ; 
+
+end
 
 function slashCommandHandlerDisapproval(sCommand, sParams)
 
