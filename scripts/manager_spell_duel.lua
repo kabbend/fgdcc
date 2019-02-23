@@ -218,12 +218,20 @@ function slashCommandHandlerSpell(sCommand, sParams)
 	-- parse params
 	local args = mysplit( sParams );
 
-	local aUsageMessage = { text = "/spell spellname" , secret = true };
+	local aUsageMessage = { text = "/spell spellname [level]" , secret = true };
 
-	-- we expect arg1 = spell name 
-	if (not args) or (#args ~= 1) then 
+	-- we expect arg1 = spell name, and optional arg2 = spell level 
+	-- spell name supersedes level, ie. if the level is given but does not match the unique spell we find, we ignore it
+	-- and display that spell anyway. Conversely, if several spells match, we take the one with that level.
+	if (not args) or (#args ~= 1 and #args ~=2 ) then 
 		Comm.addChatMessage(aUsageMessage) ; 
 		return;
+	end
+
+	-- get level if given, or keep it nil
+	local requestedLevel = nil;
+	if #args == 2 then
+		requestedLevel = tonumber( args[2] );
 	end
 
 	-- try to find it
@@ -231,7 +239,7 @@ function slashCommandHandlerSpell(sCommand, sParams)
 	for _,spell in ipairs(child) do
 		local name = spell.getName();
 		if name == args[1] then
-			-- found ! open window
+			-- found a perfect match. open window. we ignore the level if given
 			local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. args[1] .. "@DCC RPG Spells" );
 			w.setSize( 800 , 600 );
 			w.setPosition( 380 , 100 );
@@ -245,7 +253,11 @@ function slashCommandHandlerSpell(sCommand, sParams)
 
 	-- display similar names, starting with the given argument
 	local similar = {};
-	local size = string.len(args[1]);
+	local size = string.len(args[1]); -- how many characters do we have to match, depending on what the user typed in
+
+	local levelMatchNumber = 0;	-- how many similar names are matching the level ? only one would be good !
+	local levelMatchName = nil;	-- last similar name matching the level
+
 	for _,spell in ipairs(child) do
 		local name = spell.getName();
 		local lvl = DB.getValue( spell , "level" , 0 );
@@ -256,20 +268,34 @@ function slashCommandHandlerSpell(sCommand, sParams)
 		local first = string.sub(name, 1, size);
 		if first == args[1] then	
 			table.insert( similar , { name = name, domain = domain, level = lvl , filled = filled } );
+			if requestedLevel and lvl == requestedLevel then
+				levelMatchNumber = levelMatchNumber + 1;
+				levelMatchName = name;
+			end
 		end
 	end
 		
 	if #similar == 1 then
-		-- found one similar. Open it.
-		aMessage = { text = "It seems to be '" .. similar[1].name .. "' ? Opening it.", secret = true };
+		-- found only one similar. Open it. we ignore the level if given
+		aMessage = { text = "It seems to be '" .. similar[1].name .. "' ? Opening it now.", secret = true };
 		Comm.addChatMessage(aMessage) ; 
 		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. similar[1].name .. "@DCC RPG Spells" );
 		w.setSize( 800 , 600 );
 		w.setPosition( 380 , 100 );
 		return;
 
+	elseif #similar > 1 and levelMatchNumber == 1 then
+		-- found several matches but only one with the correct level. open it.
+		aMessage = { text = "It seems to be '" .. levelMatchName .. "' with that level ? Opening it now.", secret = true };
+		Comm.addChatMessage(aMessage) ; 
+		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. levelMatchName .. "@DCC RPG Spells" );
+		w.setSize( 800 , 600 );
+		w.setPosition( 380 , 100 );
+		return;
+
+
 	elseif #similar > 1 then
-		-- too many. display them all.
+		-- too many and the level is useless. display them all.
 		aMessage = { text = "Spell not found. Did you mean :" , secret = true };
 		for _,n in ipairs(similar) do
 			aMessage.text = aMessage.text .. "\n" .. n.filled .. n.name .. "  (" .. n.domain .. " , " .. n.level .. ")";
@@ -299,7 +325,7 @@ end
 
 function slashCommandHandlerHelp(sCommand, sParams)
 
-	local aUsageMessage = { text = "/spell spellname\nopen a particular spell table" , secret = true };
+	local aUsageMessage = { text = "/spell spellname [level]\nopen a particular spell table, possibly matching that level" , secret = true };
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/dis check\nroll on disapproval table. Check is N x d4 - luck mod";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/mis check\nroll on generic misfire table. Check is 1d8";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/co mMgG spellLevel [check]\nroll for corruption. Letter gives the table, (m)inor, (M)ajor or (gG)reater. Spell level is mandatory, roll check is optional. If roll given, must not take spell level into account, just the die roll 1d10 + luck mod";
