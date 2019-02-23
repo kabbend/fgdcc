@@ -124,5 +124,6 @@
 	<script name="ActionSkill" file="scripts/manager_action_skill.lua" />
 	<script name="SpellDuel" file="scripts/manager_spell_duel.lua" />
 	<script name="Loot" file="scripts/manager_loot.lua" />
+	<script name="Name" file="scripts/manager_names.lua" />
 
 </root>

@@ -299,25 +299,15 @@ end
 
 function slashCommandHandlerHelp(sCommand, sParams)
 
-	local aUsageMessage = { text = "/spell spellname\nopen a particular spell table\n" , secret = true };
-	Comm.addChatMessage(aUsageMessage) ; 
+	local aUsageMessage = { text = "/spell spellname\nopen a particular spell table" , secret = true };
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/dis check\nroll on disapproval table. Check is N x d4 - luck mod";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/mis check\nroll on generic misfire table. Check is 1d8";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/co mMgG spellLevel [check]\nroll for corruption. Letter gives the table, (m)inor, (M)ajor or (gG)reater. Spell level is mandatory, roll check is optional. If roll given, must not take spell level into account, just the die roll 1d10 + luck mod";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/sd attackerCheck defenderCheck\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Determines appropriate die then roll it automatically. In case of equal checks, roll directly on Phlogiston table";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/wiz maxlevel  or  /cle maxlevel\nrandomly choose a spell per level for an NPC, defined by maxlevel value (1-5)";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/loot [low|med|high]\ndetermines random loot";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/name[s]\nchoose random names for various races, towns, clan and taverns";
 
-	local aUsageMessage = { text = "/dis check\nroll on disapproval table. Check is N x d4 - luck mod.\n" , secret = true };
-	Comm.addChatMessage(aUsageMessage) ; 
-
-	local aUsageMessage = { text = "/mis check\nroll on generic misfire table. Check is 1d8.\n" , secret = true };
-	Comm.addChatMessage(aUsageMessage) ; 
-
-	aUsageMessage = { text = "/co mMgG spellLevel [check]\nroll on corruption tables. The letter gives the table, (m)inor, (M)ajor or (gG)reater. The spell level must be given, the roll check is optional. If roll given, should not take spell level into account, just the bare die Roll, ie. 1d10 + luck mod.\n" , secret = true };
-	Comm.addChatMessage(aUsageMessage) ; 
-
-	local aUsageMessage = { text = "/sd attackerCheck defenderCheck\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Given the checks, the command determines appropriate die then roll it automatically. In case of equals checks, roll directly on Phlogiston table.\n" , secret = true };
-	Comm.addChatMessage(aUsageMessage) ; 
-
-	local aUsageMessage = { text = "/wiz maxlevel\n/cle maxlevel\nrandomly choose a spell per level for an NPC, defined by maxlevel value (1-5)" , secret = true };
-	Comm.addChatMessage(aUsageMessage) ; 
-
-	local aUsageMessage = { text = "/loot [low|med|high]\ndetermines random loot" , secret = true };
 	Comm.addChatMessage(aUsageMessage) ; 
 end
 
