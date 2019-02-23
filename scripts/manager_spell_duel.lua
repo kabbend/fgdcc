@@ -331,7 +331,7 @@ function slashCommandHandlerHelp(sCommand, sParams)
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/co mMgG spellLevel [check]\nroll for corruption. Letter gives the table, (m)inor, (M)ajor or (gG)reater. Spell level is mandatory, roll check is optional. If roll given, must not take spell level into account, just the die roll 1d10 + luck mod";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/sd attackerCheck defenderCheck\nroll for spell duel, given the two spell checks. Checks must be greater than 12 (otherwise no need to roll). Determines appropriate die then roll it automatically. In case of equal checks, roll directly on Phlogiston table";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/wiz maxlevel  or  /cle maxlevel\nrandomly choose a spell per level for an NPC, defined by maxlevel value (1-5)";
-	aUsageMessage.text = aUsageMessage.text .. "\n\n/loot [low|med|high]\ndetermines random loot";
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/loot [low|med|high|very]\ndetermines random loot";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/name[s]\nchoose random names for various races, towns, clan and taverns";
 
 	Comm.addChatMessage(aUsageMessage) ; 
@@ -366,7 +366,7 @@ function slashCommandHandlerMisfire(sCommand, sParams)
 	end
 
 	local sText = misT[nRoll]; 
-	local aMessage = { text = " => [misfire , roll " .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [misfire , roll is " .. nRoll .. "] " .. sText , secret = true };
 	Comm.addChatMessage(aMessage) ; 
 
 end
@@ -399,7 +399,7 @@ function slashCommandHandlerDisapproval(sCommand, sParams)
 	end
 
 	local sText = disT[nRoll]; 
-	local aMessage = { text = " => [disapproval , roll " .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [disapproval , roll is " .. nRoll .. "] " .. sText , secret = true };
 	Comm.addChatMessage(aMessage) ; 
 
 end
@@ -409,7 +409,7 @@ function slashCommandHandlerCorruption(sCommand, sParams)
 	-- parse params
 	local args = mysplit( sParams );
 
-	local aUsageMessage = { text = "/co [mMG] spellLevel (roll d10+luck) / m=minor,M=Major,G or g=Greater" , secret = true };
+	local aUsageMessage = { text = "/co [mMG] spellLevel (roll d10+luck)\nm=minor,M=Major,G or g=Greater" , secret = true };
 
 	-- we expect arg1 = a letter, arg 2 = spell level, and eventually a roll number 
 	if (not args) or (#args ~= 2 and #args ~= 3) then 
@@ -443,13 +443,17 @@ function slashCommandHandlerCorruption(sCommand, sParams)
 	end
 
 	local nInitialRoll;
+	local rollSentence = "";
 
 	-- roll die if not given
 	if nRoll == 0 then
 		nInitialRoll = math.random(10);
+		rollSentence = "ed";
 		nRoll = nInitialRoll - nSpellLevel;
 	else
 		nInitialRoll = nRoll;
+		rollSentence = " is";
+		nRoll = nInitialRoll - nSpellLevel;
 		nRoll = nRoll - nSpellLevel;
 	end
 
@@ -461,7 +465,7 @@ function slashCommandHandlerCorruption(sCommand, sParams)
 	end
 
 	local sText = coT[sCoTable][nRoll]; 
-	local aMessage = { text = " => [corruption " .. sCoTable .. " on spell level " .. nSpellLevel .. ", roll " .. nInitialRoll .. ", result=" .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [corruption " .. sCoTable .. " on spell level " .. nSpellLevel .. ", roll" .. rollSentence .. " " .. nInitialRoll .. ", result is " .. nRoll .. "] " .. sText , secret = true };
 	Comm.addChatMessage(aMessage) ; 
 
 end

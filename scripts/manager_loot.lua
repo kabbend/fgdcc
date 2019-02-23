@@ -575,7 +575,7 @@ function slashCommandHandlerLoot(sCommand, sParams)
         -- parse params
         local args = mysplit( sParams );
 
-        local aUsageMessage = { text = sCommand .. " low/med/high" , secret = true };
+        local aUsageMessage = { text = sCommand .. " low/med/high/very" , secret = true };
 
 	if (#args > 1) then
                 Comm.addChatMessage(aUsageMessage) ;
@@ -588,7 +588,7 @@ function slashCommandHandlerLoot(sCommand, sParams)
 	else
 		value = args[1];
 	end
-	if value ~= "low" and value ~= "med" and value ~= "high" then value = "low"; end
+	if value ~= "low" and value ~= "med" and value ~= "high" and value ~= "very" then value = "low"; end
 
 	local howmany;
 	local aMessage = { text = "" , secret = true };
@@ -701,6 +701,32 @@ function slashCommandHandlerLoot(sCommand, sParams)
 			aMessage.text = aMessage.text .. (count+2) .. ". (i) " .. rollItem() .. "\n";
 		end
 	
+	elseif value == "very" then
+
+		local count = 0;
+
+		-- no comestible
+		-- no mundane item
+
+ 		-- a ten thousands of gold
+		count = count + 1;
+		aMessage.text = aMessage.text .. count .. ". (g) " .. 10000 + math.random(20000) .. " GP coins\n";
+
+		-- 4-5 potions
+		howmany = math.random(2)+3;
+		for i=1,howmany do
+			count = count + 1;
+			local index = math.random(#loot["potions"]);
+			aMessage.text = aMessage.text .. count .. ". (p) " .. loot["potions"][index] .. "\n";
+		end
+	
+		-- 3-5 items
+		howmany = math.random(3)+2;
+		for i=1,howmany do
+			count = count + 1;
+			aMessage.text = aMessage.text .. count .. ". (i) " .. rollItem() .. "\n";
+		end
+
 	end
 
         Comm.addChatMessage(aMessage) ;
