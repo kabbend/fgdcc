@@ -24,9 +24,9 @@ local fTable = {
 };
 
 function onInit()
-
 	ActionsManager.registerModHandler("fumble", modRoll);
 	ActionsManager.registerResultHandler("fumble", onRoll);
+	Comm.registerSlashHandler("fumble", slashCommandHandlerFumble);
 end
 
 function getRollMessage(nRollValue)
@@ -126,3 +126,39 @@ function onRoll(rSource, rTarget, rRoll)
 
 	Comm.deliverChatMessage(rMessage);
 end
+
+
+function mysplit(inputstr, sep)
+                        if sep == nil then sep = "%s" end
+                                local t={}
+                                for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+                                table.insert(t, str)
+                                end
+                                return t
+                        end
+
+function slashCommandHandlerFumble(sCommand, sParams)
+
+        -- parse params
+        local args = mysplit( sParams );
+
+        local aUsageMessage = { text = sCommand .. " check" , secret = true };
+
+        -- we expect arg1 = roll 
+        if (not args) or (#args ~= 1) then
+                Comm.addChatMessage(aUsageMessage) ;
+                return;
+        end
+
+        local check = tonumber( args[1] );
+        if not check then
+                Comm.addChatMessage(aUsageMessage) ;
+                return;
+        end
+
+        local aMessage = { text = "fumble, roll is " .. check .. " => " .. getRollMessage(check) , secret = true };
+        Comm.addChatMessage(aMessage) ;
+
+end
+
+

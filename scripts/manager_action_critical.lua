@@ -239,6 +239,7 @@ local critT = {
 function onInit()
 	ActionsManager.registerModHandler("critical", modRoll);
 	ActionsManager.registerResultHandler("critical", onRoll);
+	Comm.registerSlashHandler("crit", slashCommandHandlerCritical);
 end
 
 function mysplit(inputstr, sep)
@@ -377,3 +378,51 @@ function onRoll(rSource, rTarget, rRoll)
 
 	Comm.deliverChatMessage(rMessage);
 end
+
+function mysplit(inputstr, sep)
+                        if sep == nil then sep = "%s" end
+                                local t={}
+                                for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+                                table.insert(t, str)
+                                end
+                                return t
+                        end
+
+function slashCommandHandlerCritical(sCommand, sParams)
+
+        -- parse params
+        local args = mysplit( sParams );
+
+        local aUsageMessage = { text = sCommand .. " 1,2,3,4,5,I,II,III,IV,V,U,M,G,DN check" , secret = true };
+
+        -- we expect arg1 = table, arg2 = check 
+        if (not args) or (#args ~= 2) then
+                Comm.addChatMessage(aUsageMessage) ;
+                return;
+        end
+
+        local table = args[1];
+	if table == "1" then
+		table = "I";
+	elseif table == "2" then
+		table = "II";
+	elseif table == "3" then
+		table = "III";
+	elseif table == "4" then
+		table = "IV";
+	elseif table == "5" then
+		table = "V";	
+	end
+			
+        local check = tonumber( args[2] );
+        if not check then
+                Comm.addChatMessage(aUsageMessage) ;
+                return;
+        end
+
+        local aMessage = { text = "Critical table " .. table .. ", roll is " .. check .. " => " .. getRollMessage(table,check) , secret = true };
+        Comm.addChatMessage(aMessage) ;
+
+end
+
+
