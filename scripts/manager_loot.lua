@@ -638,7 +638,7 @@ function slashCommandHandlerLoot(sCommand, sParams)
 	if value ~= "low" and value ~= "med" and value ~= "high" and value ~= "very" then value = "low"; end
 
 	local howmany;
-	local aMessage = { text = "" , secret = true };
+	local aMessage = { text = "" , secret = true, font = "callingcode" };
 
 	if value == "low" then
 

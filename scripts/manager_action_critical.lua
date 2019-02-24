@@ -420,7 +420,7 @@ function slashCommandHandlerCritical(sCommand, sParams)
                 return;
         end
 
-        local aMessage = { text = "Critical table " .. table .. ", roll is " .. check .. " => " .. getRollMessage(table,check) , secret = true };
+        local aMessage = { text = "Critical table " .. table .. ", roll is " .. check .. " => " .. getRollMessage(table,check) , secret = true, font = "callingcode" };
         Comm.addChatMessage(aMessage) ;
 
 end

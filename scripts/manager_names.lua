@@ -131,7 +131,7 @@ function slashCommandHandlerNames(sCommand, sParams)
         local args = mysplit( sParams );
 
         local aUsageMessage = { text = sCommand, secret = true };
-        local aMessage = { text = "", secret = true };
+        local aMessage = { text = "", secret = true, font = "callingcode" };
 
 	-- pick one name in each category
 	for k,v in pairs(names) do

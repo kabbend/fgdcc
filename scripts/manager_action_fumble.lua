@@ -156,7 +156,7 @@ function slashCommandHandlerFumble(sCommand, sParams)
                 return;
         end
 
-        local aMessage = { text = "fumble, roll is " .. check .. " => " .. getRollMessage(check) , secret = true };
+        local aMessage = { text = "fumble, roll is " .. check .. " => " .. getRollMessage(check) , secret = true, font = "callingcode" };
         Comm.addChatMessage(aMessage) ;
 
 end

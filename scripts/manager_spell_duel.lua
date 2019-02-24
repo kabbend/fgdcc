@@ -196,7 +196,7 @@ function slashCommandHandlerMagicUser(sCommand, sParams)
 	end
 
 	-- then randomly select one spell per level
-	aMessage = { text = "Selected spells :" , secret = true };
+	aMessage = { text = "Selected spells :" , secret = true, font = "callingcode" };
 	local offset = 0;
 	for i=1,maxlevel do
 		if #eligible[i] > 0 then
@@ -249,7 +249,7 @@ function slashCommandHandlerSpell(sCommand, sParams)
 
 	-- if here, not found...
 
-	local aMessage = {};
+	local aMessage = { secret = true, font = "callingcode" };
 
 	-- display similar names, starting with the given argument
 	local similar = {};
@@ -277,7 +277,7 @@ function slashCommandHandlerSpell(sCommand, sParams)
 		
 	if #similar == 1 then
 		-- found only one similar. Open it. we ignore the level if given
-		aMessage = { text = "It seems to be '" .. similar[1].name .. "' ? Opening it now.", secret = true };
+		aMessage = { text = "It seems to be '" .. similar[1].name .. "' ? Opening it now.", secret = true, font = "callingcode" };
 		Comm.addChatMessage(aMessage) ; 
 		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. similar[1].name .. "@DCC RPG Spells" );
 		w.setSize( 800 , 600 );
@@ -286,7 +286,7 @@ function slashCommandHandlerSpell(sCommand, sParams)
 
 	elseif #similar > 1 and levelMatchNumber == 1 then
 		-- found several matches but only one with the correct level. open it.
-		aMessage = { text = "It seems to be '" .. levelMatchName .. "' with that level ? Opening it now.", secret = true };
+		aMessage = { text = "It seems to be '" .. levelMatchName .. "' with that level ? Opening it now.", secret = true, font = "callingcode" };
 		Comm.addChatMessage(aMessage) ; 
 		local w = Interface.openWindow ("reference_spell" , "reference.spelldata." .. levelMatchName .. "@DCC RPG Spells" );
 		w.setSize( 800 , 600 );
@@ -296,7 +296,7 @@ function slashCommandHandlerSpell(sCommand, sParams)
 
 	elseif #similar > 1 then
 		-- too many and the level is useless. display them all.
-		aMessage = { text = "Spell not found. Did you mean :" , secret = true };
+		aMessage = { text = "Spell not found. Did you mean :" , secret = true, font = "callingcode" };
 		for _,n in ipairs(similar) do
 			aMessage.text = aMessage.text .. "\n" .. n.filled .. n.name .. "  (" .. n.domain .. " , " .. n.level .. ")";
 		end
@@ -305,7 +305,7 @@ function slashCommandHandlerSpell(sCommand, sParams)
 	end
 
 	-- if no similar name, display all spells starting with same letter
-	aMessage = { text = "Spell not found. Did you mean :" , secret = true };
+	aMessage = { text = "Spell not found. Did you mean :" , secret = true, font = "callingcode" };
 	local letter = string.sub(args[1], 1, 1);
 	for _,spell in ipairs(child) do
 		local name = spell.getName();
@@ -369,7 +369,7 @@ function slashCommandHandlerMisfire(sCommand, sParams)
 	end
 
 	local sText = misT[nRoll]; 
-	local aMessage = { text = " => [misfire , roll is " .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [misfire , roll is " .. nRoll .. "] " .. sText , secret = true, font = "callingcode" };
 	Comm.addChatMessage(aMessage) ; 
 
 end
@@ -402,7 +402,7 @@ function slashCommandHandlerDisapproval(sCommand, sParams)
 	end
 
 	local sText = disT[nRoll]; 
-	local aMessage = { text = " => [disapproval , roll is " .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [disapproval , roll is " .. nRoll .. "] " .. sText , secret = true, font = "callingcode" };
 	Comm.addChatMessage(aMessage) ; 
 
 end
@@ -468,7 +468,7 @@ function slashCommandHandlerCorruption(sCommand, sParams)
 	end
 
 	local sText = coT[sCoTable][nRoll]; 
-	local aMessage = { text = " => [corruption " .. sCoTable .. " on spell level " .. nSpellLevel .. ", roll" .. rollSentence .. " " .. nInitialRoll .. ", result is " .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [corruption " .. sCoTable .. " on spell level " .. nSpellLevel .. ", roll" .. rollSentence .. " " .. nInitialRoll .. ", result is " .. nRoll .. "] " .. sText , secret = true, font = "callingcode" };
 	Comm.addChatMessage(aMessage) ; 
 
 end
@@ -500,7 +500,7 @@ function slashCommandHandlerSpellDuel(sCommand, sParams)
 		-- roll on phlo table, max. 10
 		local nRoll = math.random(10);
 		local sText = phlo[nRoll]; 
-		local aMessage = { text = " => [Phlogiston Disturbance!, roll " .. nRoll .. "] " .. sText , secret = true };
+		local aMessage = { text = " => [Phlogiston Disturbance!, roll " .. nRoll .. "] " .. sText , secret = true, font = "callingcode" };
 		Comm.addChatMessage(aMessage) ; 
 		return;
 	end
@@ -546,7 +546,7 @@ function slashCommandHandlerSpellDuel(sCommand, sParams)
 	if nRoll > 10 then nRoll = 10; end
 	
 	local sText = counterspell[countercolumn][nRoll]; 
-	local aMessage = { text = " => [" .. countercolumn .. ", die d" .. die .. ", roll " .. nRoll .. "] " .. sText , secret = true };
+	local aMessage = { text = " => [" .. countercolumn .. ", die d" .. die .. ", roll " .. nRoll .. "] " .. sText , secret = true, font = "callingcode" };
 	Comm.addChatMessage(aMessage) ; 
 
 end
