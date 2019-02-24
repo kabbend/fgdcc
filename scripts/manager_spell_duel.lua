@@ -326,6 +326,7 @@ end
 function slashCommandHandlerHelp(sCommand, sParams)
 
 	local aUsageMessage = { text = "/spell spellname [level] : Open a particular spell table, possibly matching that level" , secret = true };
+	aUsageMessage.text = aUsageMessage.text .. "\n\n/equip : display list of common equipment";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/fumble check : Roll on fumble table";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/crit 1,2,3,4,5,I,II,III,IV,V,U,M,G,DN check : Roll on critical table";
 	aUsageMessage.text = aUsageMessage.text .. "\n\n/dis check : Roll on disapproval table. Check is N x d4 - luck mod";

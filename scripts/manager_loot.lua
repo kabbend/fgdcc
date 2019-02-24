@@ -1,4 +1,40 @@
 
+local equip = {
+	{ name = "arbalete    ", effect = "1d6      ", cost = "30gp" },
+	{ name = "arc court   ", effect = "1d6      ", cost = "25gp" },
+	{ name = "arc long    ", effect = "1d6      ", cost = "40gp" },
+	{ name = "baton       ", effect = "1d4      ", cost = "1gp" },
+	{ name = "dague       ", effect = "1d4/1d10 ", cost = "3gp   ", comment = "surp./backs." },
+	{ name = "epee courte ", effect = "1d6      ", cost = "7gp" },
+	{ name = "epee longue ", effect = "1d8      ", cost = "10gp" },
+	{ name = "epee 2M     ", effect = "1d10     ", cost = "15gp  ", comment = "init. d16" },
+	{ name = "fleau       ", effect = "1d6      ", cost = "6gp" },
+	{ name = "fronde      ", effect = "1d4      ", cost = "2gp" },
+	{ name = "garrot      ", effect = "1/3d4    ", cost = "2gp   ", comment = "surp./backs." },
+	{ name = "gourdin     ", effect = "1d4      ", cost = "3gp" },
+	{ name = "hache       ", effect = "1d6      ", cost = "4gp" },
+	{ name = "hache 2M    ", effect = "1d10     ", cost = "7gp   ", comment = "init. d16" },
+	{ name = "javelot     ", effect = "1d6      ", cost = "3gp" },
+	{ name = "lance       ", effect = "1d8      ", cost = "3gp" },
+	{ name = "lance montee", effect = "1d12     ", cost = "25gp" },
+	{ name = "masse       ", effect = "1d6      ", cost = "5gp" },
+	{ name = "matraque    ", effect = "1d3/1d6  ", cost = "3gp   ", comment = "surp./backs." },
+	{ name = "marteau     ", effect = "1d8      ", cost = "5gp" },
+	{ name = "----"  },
+	{ name = "sans armure ", effect = "+0/-/d4  ", },
+	{ name = "rembourre   ", effect = "+1/-/d8  ", cost = "5gp" },
+	{ name = "cuir        ", effect = "+2/-1/d8 ", cost = "20gp" },
+	{ name = "cuir cloute ", effect = "+3/-2/d8 ", cost = "45gp" },
+	{ name = "peau        ", effect = "+3/-3/d12", cost = "30gp" },
+	{ name = "ecailles    ", effect = "+4/-4/d12", cost = "80gp" },
+	{ name = "cotte       ", effect = "+5/-5/d12", cost = "150gp" },
+	{ name = "composite   ", effect = "+6/-6/d16", cost = "250gp" },
+	{ name = "semiplate   ", effect = "+7/-7/d16", cost = "450gp" },
+	{ name = "plate       ", effect = "+8/-8/d16", cost = "1200gp" },
+	{ name = "----"  },
+	{ name = "bouclier    ", effect = "+1/-1/d8 ", cost = "10gp" },
+	};
+
 local loot = {
 
   ["comestible"] = {
@@ -350,6 +386,15 @@ local loot = {
 	"Healing potion 1d8 HP",
 	"Healing potion 1d8 HP",
 	"Healing potion 1d8 HP",
+	"Healing potion 1d8 HP",
+	"Healing potion 1d8 HP",
+	"Healing potion 1d8 HP",
+	"Healing potion 1d8 HP",
+	"Healing potion 1d10 HP",
+	"Healing potion 1d10 HP",
+	"Healing potion 1d10 HP",
+	"Healing potion 1d10 HP",
+	"Healing potion 1d10 HP",
 	"Healing potion 1d10 HP",
 	"Healing potion 1d10 HP",
 	"Healing potion 1d10 HP",
@@ -517,6 +562,7 @@ local loot = {
 
 function onInit()
         Comm.registerSlashHandler("loot", slashCommandHandlerLoot);
+        Comm.registerSlashHandler("equip", slashCommandHandlerEquip);
 end
 
 function mysplit(inputstr, sep)
@@ -527,6 +573,7 @@ function mysplit(inputstr, sep)
                                 end
                                 return t
                         end
+
 
 -- return the name of a random wizard spell, for a given level (1-5)
 function rollScroll(level)
@@ -731,6 +778,21 @@ function slashCommandHandlerLoot(sCommand, sParams)
 
         Comm.addChatMessage(aMessage) ;
 	
+end
+
+function slashCommandHandlerEquip( sCommand, sParams )
+	
+	local aMessage = { text = "" , secret = true, font = "callingcode" };
+
+	for _,line in ipairs(equip) do
+		aMessage.text = aMessage.text .. line["name"];
+		if line["effect"] then aMessage.text = aMessage.text .. " " .. line["effect"]; end
+		if line["cost"] then aMessage.text = aMessage.text .. " " .. line["cost"] ; end
+		if line["comment"] then aMessage.text = aMessage.text .. " (" .. line["comment"] .. ")" ; end
+		aMessage.text = aMessage.text .. "\n";
+	end
+        Comm.addChatMessage(aMessage) ;
+
 end
 
 

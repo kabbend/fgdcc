@@ -124,4 +124,8 @@
 		<ttf file="graphics/fonts/Primordial.ttf" name="Primordial" size="24" />
 		<color value="#000000" />
 	</font>
+	<font name="callingcode">
+		<ttf file="graphics/fonts/CallingCode-Regular.ttf" name="Calling Code Regular" size="15" />
+		<color value="#000000" />
+	</font>
 </root>
